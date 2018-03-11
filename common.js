@@ -52,7 +52,7 @@ blocklist.common.HOST_REGEX = new RegExp(
  * id.
  * @private
  */
-blocklist.common.logAction_ = function (request) {
+blocklist.common.logAction_ = request => {
     var site = request.pattern;
     var eid = request.ei;
     var action = request.type;

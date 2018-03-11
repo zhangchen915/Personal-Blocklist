@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -14,10 +13,6 @@ function TabContainer(props) {
         </Typography>
     );
 }
-
-TabContainer.propTypes = {
-    children: PropTypes.node.isRequired,
-};
 
 const styles = theme => ({
     root: {
@@ -56,9 +51,5 @@ class SimpleTabs extends React.Component {
         );
     }
 }
-
-SimpleTabs.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(styles)(SimpleTabs);

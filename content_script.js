@@ -302,7 +302,7 @@ blocklist.serp.modifySearchResults_ = () => {
     if (blocklist.serp.blocklist.length > 0 || blocklist.serp.needsRefresh) {
         blocklist.serp.hideSearchResults();
     }
-    var processedSearchResultList = blocklist.serp.getNodes(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
+    let processedSearchResultList = blocklist.serp.getNodes(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
 
     // Add blocklist links to search results until all have been processed.
     if (blocklist.serp.needsRefresh || processedSearchResultList.length < searchElement.length) {
