@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Engelle"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Mevcut etki alanını engelle: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": ""
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": "'u engelle"
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Bazı sonuçlar Kişisel Engel Listesi Chrome eklentisi tarafından kaldırıldı"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "İptal"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Kalıp"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Düzenle"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Dışarı aktar"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Listeyi Google hesabınıza aktardıktan sonra bu eklentiyi geçersiz kılmak ister misiniz?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "Hayir"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Bu eklentiyi geçersiz kılmak ister misiniz?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Evet"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Listeyi taşıma panosuna kopyalayın ya da Google hesabınıza aktarın."
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Google hesabınıza aktarın"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Içeri aktar"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Eklenecek kalıpları gir (her satıra bir tane):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Kalıp geçersiz karakterler içermekte."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "tr"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Engellenecek kalıp bulunamadı."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Henüz hiçbir etki alanı ya da ev sahibi site engellenmedi. Engellemek için arama sonucunun yanındaki \u003Cb>'[etki alanı/ev sahibi site] engelle'\u003C/b> bağlantısına tıklayın."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Tamam"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Operasyon"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Etki alanı/Ev sahibi site Google arama sonuçlarından engellendi."
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "göster"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Engeli kaldır"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": ""
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": "'a engeli kaldır"
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " yeni kalıp eklendi."
+   }
+}

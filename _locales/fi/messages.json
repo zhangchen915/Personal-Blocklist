@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Estä"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Estä tämä sivusto: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Estä "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Personal Blocklist Chrome-laajennus poisti osan tuloksista"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Peruuta"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Sivusto"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Muokkaa"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Vie"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Haluatko poistaa tämän laajennuksen sen jälkeen kun olet vienyt listan Google-tiliisi?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "Ei"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Poista tämä laajenus?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Kyllä"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Kopioi lista leikepöydälle tai vie se Google-tiliisi."
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Vie Google-tiliin"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Tuo"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Syötä lisättävät sivustot (yksi sivusto riviä kohden):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Sivusto sisältää tunnistamattomia merkkejä."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "fi"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Blocklist sivustoja ei löytynyt."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Yhtään sivustoa ei ole vielä estetty. Estä napsauttamalla hakutuloksen vieressä olevaa \u003Cb>'Estä [sivusto]'\u003C/b> -painiketta."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Toimenpide"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Sivustot, jotka estetään Google-hakutuloksissa"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "näytä"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Salli"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Salli "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " uutta sivustoa tunnistettu ja lisätty."
+   }
+}

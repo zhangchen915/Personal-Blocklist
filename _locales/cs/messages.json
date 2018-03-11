@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Zablokovat"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Zablokovat tohoto hostitele/ tuto doménu: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Zablokovat "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Některé výsledky byly odstraněny rozšířením Chrome Personal Blocklist"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Zrušit"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Doména/Hostitel"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Upravit"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Exportovat"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Přejete si zakázat tuto funkci po exportování stránky do vašeho Google účtu?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "Ne"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Zakázat tuto funkci?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Ano"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Kopírovat výběr nebo jej exportovat do Google účtu."
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Exportovat do Google účtu"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Importovat"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Zadejte seznam domén/hostitelů, jež chcete přidat (na jednotlivé řádky):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Adresa obsahuje nepovolené znaky."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "cs"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Nebyly nalezeny žádné domény/hostitelé."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Žádné domény/hostitelé zatím nejsou blokovány. Chcete-li blokovat, klikněte na \u003Cb>'Zablokovat [doménu/hostitele]'\u003C/b> vedle výsledku vyhledávání."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Operace"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Domény/hostitelé, jež jsou blokovány z výsledků vyhledávání Googlu"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "zobrazit"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Odblokovat"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Odblokovat "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " nových domén/hostitelů bylo přidáno."
+   }
+}

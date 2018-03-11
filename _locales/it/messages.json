@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Blocca"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Blocca l'host attuale: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Blocca "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Alcuni risultati sono stati rimossi dall'estensione di Chrome Personal Blocklist"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Cancella"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Indirizzo"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Modifica"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Esporta"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Vuoi disabilitare questa estensione dopo aver esportato la lista nel tuo account Google?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "No"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Disabilitare questa estensione?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Sì"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Copia la lista negli appunti o esportala nel tuo account Google"
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Esporta nel tuo account Google"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Importa"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Digita la lista di indirizzi da aggiungere (uno per riga):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Il pattern contiene del caratteri non validi"
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "de"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Nessun indirizzo della lista trovato."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Nessun dominio/host è stato già bloccato. Puoi bloccare cliccando sul link \u003Cb>'Blocca [dominio/host]'\u003C/b> a fianco di un risultato di ricerca."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Operazione"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Domini/Host bloccati dai risultati di ricerca di Google"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "Mostra"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Sblocca"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Sblocca "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " nuovi indirizzi aggiunti."
+   }
+}

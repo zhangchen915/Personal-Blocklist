@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Blocati"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Blocati domeniul curent: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Blocati "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Unele rezultate au fost excluse datorita block-listei personale din extensia Chrome"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Anulati"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Domeniu/gazda"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Editati"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Exportati"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Do you want to disable this extension after exporting the list to your Google account?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "No"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Disable extension?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Yes"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Copy the list to clipboard or export to your Google account."
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Exportati la contul Google"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Importati"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Importati lista de domenii (unul pe linie)"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Pattern contains invalid characters."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "ro"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Nu exista o lista de domenii blocate "
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Nici un domeniu nu a fost inca blocat. Blocati apasand pe linkul \u003Cb>'Blocati [domeniu/gazda]'\u003C/b> de langa rezultatele de cautare."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Operatie"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Domeniu/gazda blocate din rezultatele de cautare Google"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "Afisati"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Deblocati"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Deblocati "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " noi domenii valide adaugate"
+   }
+}

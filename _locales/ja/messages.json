@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "ブロック"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "現在表示中のドメイン/ホストをブロック: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": ""
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": " をブロック"
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Personal Blocklist 拡張機能によって一部の検索結果が除外されています。"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "キャンセル"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "パターン"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "編集"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "エクスポート"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "リストをGoogle アカウントにエクスポートした後に、Personal Blocklist 拡張機能を無効化しますか？"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "いいえ"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Personal Blocklist 拡張機能を無効化しますか？"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "はい"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "リストをクリップボードにコピーするか、Google アカウントにエクスポートします。"
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Google アカウントにエクスポート"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "インポート"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "追加するドメイン/ホストのリストを 1 行に 1 つずつ入力します。"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "ドメイン/ホストに無効な文字が含まれています。"
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "ja"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "ブロックリストが見つかりません。"
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "ブロックされているドメイン/ホストがありません。検索結果の横の [\u003Cb>[ドメイン/ホスト]をブロック\u003C/b>] のリンクをクリックすることでブロックできます。"
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "OK"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "操作"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Google の検索結果からブロックされたドメイン/ホスト"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "表示"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "ブロックを解除"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": ""
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": " のブロックを解除"
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " 個の有効なドメイン/ホストが新しく追加されました。"
+   }
+}

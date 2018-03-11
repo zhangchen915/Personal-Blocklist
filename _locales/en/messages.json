@@ -1,0 +1,114 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Block"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Block current host: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Block "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Some results were removed by the Personal Blocklist Chrome extension"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Cancel"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Pattern"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Edit"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Export"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "No"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Disable this extension?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Yes"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Copy the list to clipboard"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Import"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Enter list of patterns to add (one per line):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Pattern contains invalid characters."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "en"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "No blocklist patterns found."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "No domains/hosts are blocked yet. Block by clicking \u003Cb>'Block [domain/host]'\u003C/b> link next to a search result."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Operation"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Domains/Hosts blocked from Google search results"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "show"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Unblock"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Unblock "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " new valid pattern(s) added."
+   }
+}

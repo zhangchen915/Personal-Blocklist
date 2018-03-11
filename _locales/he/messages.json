@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "חסום"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "חסום שרת נוכחי: "
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "חסום את "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "  תוצאות מסוימות הוסרו על ידי תוסף   Personal Blocklist Chrome"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "ביטול"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "תבנית"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "ערוך"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "יצוא"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "האם ברצונך לבטל את תוסף זה לאחר ייצוא הרשימה לחשבון Google שלך?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "לא"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "האם לבטל את תוסף זה?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "כן"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "העתק את הרשימה ל- clipboard או ייצא לחשבון Google שלך"
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "ייצא לחשבון Google"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "יבוא"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "הזן רשימה של דומיינים או שרתים שברצונך להוסיף (אחד לכל שורה):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "התבנית מכילה תווים בלתי חוקיים"
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "he"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "לא נמצאו דומיינים/שרתים חסומים."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "אף דומיין/שרת לא נחסם עדיין. חסום על ידי לחיצה על הקישור \u003Cb>'חסום [דומיין/שרת]'\u003C/b> "
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "אישור"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "דומיין/שרת"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "דומיין/שרת נחסמו מתוצאות החיפוש של Google"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "הצג"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "rtl"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "הסר חסימה"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "הסר חסימה "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " דומיינים/שרתים חדשים נוספו לרשימה."
+   }
+}

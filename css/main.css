@@ -1,0 +1,18 @@
+a.ab_button {
+    background: inherit;
+}
+
+.blocked {
+    display: none;
+}
+
+.blockedVisible {
+    display: block;
+    background-color: #FFD2D2
+}
+
+#blocklistNotification {
+    font-style: italic;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

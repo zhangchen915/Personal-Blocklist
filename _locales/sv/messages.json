@@ -1,0 +1,122 @@
+{
+   "block": {
+      "description": "Block link on the blocklist management pop-up.",
+      "message": "Blockera"
+   },
+   "blockCurrent": {
+      "description": "Link text to block host of current tab url.",
+      "message": "Blockera nuvarande värd:"
+   },
+   "blockLinkPrefix": {
+      "description": "Anchor of the blocklist link, host name will be appended (e.g. 'Block wikipedia.org'). If given, should end with space.",
+      "message": "Blockera "
+   },
+   "blockLinkSuffix": {
+      "description": "Anchor of the blocklist link, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "blocklistNotification": {
+      "description": "Notification at bottom of page indicating that some results have been removed by the extension.",
+      "message": "Vissa resultat har blivit borttagna av tillägget Personal Blocklist Chrome"
+   },
+   "cancel": {
+      "description": "Cancel button on the blocklist management pop-up.",
+      "message": "Avbryt"
+   },
+   "domain": {
+      "description": "Table header for domains.",
+      "message": "Mönster"
+   },
+   "edit": {
+      "description": "Edit link on the blocklist management pop-up.",
+      "message": "Ändra"
+   },
+   "export": {
+      "description": "Export button/link text.",
+      "message": "Exportera"
+   },
+   "exportDialogMessage": {
+      "description": "Message in the export dialog box.",
+      "message": "Do you want to disable this extension after exporting the list to your Google account?"
+   },
+   "exportDialogNo": {
+      "description": "Option message in the export dialog box.",
+      "message": "No"
+   },
+   "exportDialogTitle": {
+      "description": "Title in the export dialog box.",
+      "message": "Disable extension?"
+   },
+   "exportDialogYes": {
+      "description": "Option message in the export dialog box.",
+      "message": "Yes"
+   },
+   "exportInstructions": {
+      "description": "Export instructions.",
+      "message": "Kopiera listan till urklipp eller exportera till ditt Google-konto."
+   },
+   "exportToGoogle": {
+      "description": "Text of the button that exports the blocklist to a Google account.",
+      "message": "Exportera till Google-konto"
+   },
+   "import": {
+      "description": "Import button/link text.",
+      "message": "Importera"
+   },
+   "importInstructions": {
+      "description": "Import instructions.",
+      "message": "Lägg in lista på mönster som skall läggas till (en per linje):"
+   },
+   "invalidPattern": {
+      "description": "Error message for editing a invalid pattern.",
+      "message": "Mönstret innehåller otillåtna tecken."
+   },
+   "languageShortcode": {
+      "description": "Language shortcode.",
+      "message": "sv"
+   },
+   "noPatterns": {
+      "description": "Error message for an empty blocklist.",
+      "message": "Inga blocklist mönster funna."
+   },
+   "nosites": {
+      "description": "Manager table hint message.",
+      "message": "Inga domäner/värdar är blockerade än. Blockera genom att klicka på \u003Cb>'Blockera [domän/värd]'\u003C/b> länken bredvid ett sökresultat."
+   },
+   "ok": {
+      "description": "Confirmation button on the blocklist management pop-up.",
+      "message": "Ok"
+   },
+   "operation": {
+      "description": "Table header for operations.",
+      "message": "Alternativ"
+   },
+   "popupTitle": {
+      "description": "Title of the blocklist management pop-up window.",
+      "message": "Domäner/Värdar blockerade från Googles sökresultat"
+   },
+   "showBlockedLink": {
+      "description": "Anchor for the link to make blocked results visible.",
+      "message": "visa"
+   },
+   "textDirection": {
+      "description": "Direction in which the language is read, either 'ltr' or 'rtl' ('left to right' vs. 'right to left').",
+      "message": "ltr"
+   },
+   "unblock": {
+      "description": "Unblock link on the blocklist management pop-up.",
+      "message": "Häv blockering"
+   },
+   "unblockLinkPrefix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be appended (e.g. 'Unblock wikipedia.org'). If given, should end with space.",
+      "message": "Häv blockering av "
+   },
+   "unblockLinkSuffix": {
+      "description": "Anchor of the link to remove domain from blocklist, host name will be prepended (e.g. 'wikipedia.org block'). If given, should start with space.",
+      "message": ""
+   },
+   "validPatternsMessage": {
+      "description": "Message that x patterns were added to blocklist.",
+      "message": " nya giltiga mönster tillagda."
+   }
+}
