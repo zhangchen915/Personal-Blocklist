@@ -77,26 +77,35 @@ blocklist.common.logAction_ = function (request) {
     }
 };
 
+function getStorage(name = 'blocklist') {
+    return new Promise((resolve) => {
+        storage.get(name, value => resolve(value))
+    })
+}
+
+function setStorage(value, name = 'blocklist') {
+    let obj = {};
+    obj[name] = value;
+    storage.set(obj)
+}
+
 blocklist.common.cmd = {
     'getBlocklist': request => {
-        storage.get('blocklist', (value) => {
-            if (!value.blocklist) {
-                value.blocklist = {};
-                storage.set({'blocklist': {}})
-            }
+        return getStorage().then(value => {
+            if (!value.blocklist) setStorage(value.blocklist = {});
             if (request.num !== undefined && request.num > 0) {
                 value.blocklist = value.blocklist.slice(request.start, request.start + request.num);
             }
             return {blocklist: value.blocklist};
-        })
+        });
     },
     'addToBlocklist': request => {
-        storage.get('blocklist', value => {
-            if (!value.blocklist.includes(request.pattern)) {
+        return getStorage().then(value => {
+            if (!value.blocklist[request.pattern]) {
                 value.blocklist[request.pattern] = {
                     time: 0
                 };
-                storage.set({'blocklist': value.blocklist})
+                setStorage(value.blocklist)
                 // blocklist.common.logAction_(request);
             }
             return {success: 1, pattern: request.pattern};
@@ -104,27 +113,30 @@ blocklist.common.cmd = {
 
     },
     'addBulkToBlocklist': request => {
-        storage.get('blocklist', value => {
-            request.patterns.forEach(e => {
-                if (!value.blocklist.includes(e)) {
-                    value.blocklist.push(e);
+        return getStorage().then(value => {
+            for(let i=0;i<request.patterns.length;i++){
+                if(!(request.patterns[i] in value.blocklist)){
+                    value.blocklist[request.patterns[i]] = {
+                        time: 0
+                    };
                 }
-            });
-            storage.set({'blocklist': value.blocklist});
+            }
+            setStorage(value.blocklist);
             return {success: 1};
         })
 
 
     },
     'deleteFromBlocklist': request => {
-        storage.get('blocklist', value => {
+        return getStorage().then(value => {
             if (value.blocklist[request.pattern]) {
                 value.blocklist[request.pattern] = null;
-                storage.set({'blocklist': value.blocklist})
+                setStorage(value.blocklist)
                 // blocklist.common.logAction_(request);
             }
+            return {success: 1, pattern: request.pattern};
         });
-        return {success: 1, pattern: request.pattern};
+
     },
     'finishExport': () => {
         chrome.management.setEnabled(
@@ -136,7 +148,7 @@ blocklist.common.cmd = {
  * Provides read & write access to local storage for content scripts.
  */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    sendResponse(blocklist.common.cmd[request.type](request));
+    blocklist.common.cmd[request.type](request).then(res => sendResponse(res));
     return true;
 });
 

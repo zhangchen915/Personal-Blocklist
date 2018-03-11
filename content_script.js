@@ -149,26 +149,23 @@ blocklist.serp.eventId = '';
  */
 blocklist.serp.isHttps = !!document.URL.indexOf('https://');
 const searchElement = $('.g');
-const getMessage=chrome.i18n.getMessage;
-const states={
-    blocklistNotification:true,
+const getMessage = chrome.i18n.getMessage;
+const states = {
+    blocklistNotification: true,
 };
 
-export const actions = {
+const actions = {
     sendMessage: (cmd, pattern) => {
-        return new Promise(res => {
-            chrome.runtime.sendMessage({
-                type: cmd,
-                pattern: pattern,
-                ei: blocklist.serp.eventId,
-                enc: blocklist.serp.isHttps
-            }, response => {
-                if (response.success) {
-                    blocklist.serp.refreshBlocklist();
-                    blocklist.serp.needsRefresh = true;
-                    res(response);
-                }
-            })
+        chrome.runtime.sendMessage({
+            type: cmd,
+            pattern: pattern,
+            ei: blocklist.serp.eventId,
+            enc: blocklist.serp.isHttps
+        }, response => {
+            if (response.success) {
+                blocklist.serp.refreshBlocklist();
+                blocklist.serp.needsRefresh = true;
+            }
         })
     },
     addBlocklistPattern: pattern => {
@@ -199,8 +196,8 @@ blocklist.serp.addLink = (searchResult, host, blockState) => {
                     blocklist.serp.addLink(curElement, host, false)
                 } else {
                     curElement.addClass('blocked').find('action-menu-block').remove();
-                    if(!states.blocklistNotification){
-                        curElement.addClass('blockedVisible')
+                    if (!states.blocklistNotification) {
+                        curElement.addClass('blockedVisible');
                         blocklist.serp.addLink(curElement, host, true)
                     }
                 }
@@ -218,9 +215,9 @@ blocklist.serp.addBlockListNotification_ = () => {
             e.toggleClass('blockedVisible');
             e.find('.action-menu-block').remove();
             blocklist.serp.addLink(e, blocklist.serp.parseDomainFromSearchResult_(e), states.blocklistNotification);
-            even.target.innerText=getMessage(states.blocklistNotification?'cancel':'showBlockedLink');
+            even.target.innerText = getMessage(states.blocklistNotification ? 'cancel' : 'showBlockedLink');
         });
-       states.blocklistNotification=!states.blocklistNotification;
+        states.blocklistNotification = !states.blocklistNotification;
     })
 };
 
@@ -261,9 +258,8 @@ blocklist.serp.findBlockPatternForHost_ = function (hostName, hostList = blockli
     // a.com is blocked, b.a.com should be hidden from search result.
     const subdomains = blocklist.serp.extractSubDomains_(hostName);
     subdomains.some(e => {
-        if (hostList.indexOf(e) !== -1) {
+        if (hostList[e]) {
             matchedPattern = e;
-
             return true;
         }
     });

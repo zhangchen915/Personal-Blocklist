@@ -20,18 +20,20 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import { lighten } from 'material-ui/styles/colorManipulator';
 
+import {getStorage} from './data'
+
 let counter = 0;
-function createData(name, calories, fat, carbs, protein) {
-    counter += 1;
-    return { id: counter, name, calories, fat, carbs, protein };
+function createData(bl) {
+    let res=[];
+    for(const key of Object.keys(bl)){
+        res.push({ id: counter++,name:key, time:bl[key].time});
+    }
+    return res;
 }
 
 const columnData = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'Dessert (100g serving)' },
-    { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-    { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-    { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-    { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+    { id: 'url', numeric: false, disablePadding: true, label: 'url' },
+    { id: 'time', numeric: true, disablePadding: false, label: 'time' }
 ];
 
 class EnhancedTableHead extends React.Component {
@@ -168,24 +170,14 @@ class EnhancedTable extends React.Component {
             order: 'asc',
             orderBy: 'calories',
             selected: [],
-            data: [
-                createData('Cupcake', 305, 3.7, 67, 4.3),
-                createData('Donut', 452, 25.0, 51, 4.9),
-                createData('Eclair', 262, 16.0, 24, 6.0),
-                createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-                createData('Gingerbread', 356, 16.0, 49, 3.9),
-                createData('Honeycomb', 408, 3.2, 87, 6.5),
-                createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-                createData('Jelly Bean', 375, 0.0, 94, 0.0),
-                createData('KitKat', 518, 26.0, 65, 7.0),
-                createData('Lollipop', 392, 0.2, 98, 0.0),
-                createData('Marshmallow', 318, 0, 81, 2.0),
-                createData('Nougat', 360, 19.0, 9, 37.0),
-                createData('Oreo', 437, 18.0, 63, 4.0),
-            ].sort((a, b) => (a.calories < b.calories ? -1 : 1)),
+            data: [],
             page: 0,
             rowsPerPage: 5,
         };
+
+        getStorage().then(value => {
+            this.setState({ data: createData(value.blocklist) })
+        })
     }
 
     handleRequestSort = (event, property) => {
@@ -196,10 +188,10 @@ class EnhancedTable extends React.Component {
             order = 'asc';
         }
 
-        const data =
-            order === 'desc'
-                ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
-                : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
+        const data =this.state.data;
+            // order === 'desc'
+            //     ? this.state.data.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1))
+            //     : this.state.data.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1));
 
         this.setState({ data, order, orderBy });
     };
@@ -278,10 +270,7 @@ class EnhancedTable extends React.Component {
                                             <Checkbox checked={isSelected} />
                                         </TableCell>
                                         <TableCell padding="none">{n.name}</TableCell>
-                                        <TableCell numeric>{n.calories}</TableCell>
-                                        <TableCell numeric>{n.fat}</TableCell>
-                                        <TableCell numeric>{n.carbs}</TableCell>
-                                        <TableCell numeric>{n.protein}</TableCell>
+                                        <TableCell numeric>{n.time}</TableCell>
                                     </TableRow>
                                 );
                             })}
