@@ -5,3 +5,18 @@ export function getStorage(name = 'blocklist') {
         storage.get(name, value => resolve(value))
     })
 }
+
+function setStorage(value, name = 'blocklist') {
+    let obj = {};
+    obj[name] = value;
+    storage.set(obj)
+}
+
+export function deleteBlockList(data) {
+    getStorage().then(res => {
+        for (let url of data) {
+            if (res[url]) res[url] = null;
+        }
+        setStorage(res)
+    })
+}
