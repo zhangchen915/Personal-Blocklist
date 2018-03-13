@@ -1,4 +1,4 @@
-import * as api from './api';
+import {api} from './api';
 
 export function getStorage(name = 'blocklist') {
     return new Promise(resolve => {

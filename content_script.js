@@ -1,8 +1,13 @@
-/**
- * Namespace for the content script functions for Google search result pages.
- * @const
- */
-blocklist.serp = {};
+const blocklist = {
+    common : {
+        GETBLOCKLIST: 'getBlocklist',
+        ADDTOBLOCKLIST: 'addToBlocklist',
+        ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
+        DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
+        FINISHEXPORT: 'finishExport'
+    },
+    serp : {}
+};
 
 /**
  * List of the search results tags on Google SERP.
@@ -164,7 +169,6 @@ const actions = {
         }, response => {
             if (response.success) {
                 blocklist.serp.refreshBlocklist();
-                blocklist.serp.needsRefresh = true;
             }
         })
     },
@@ -180,8 +184,10 @@ const actions = {
 };
 
 blocklist.serp.addLink = (searchResult, host, blockState) => {
-    searchResult.find('ol').append(`<li class="action-menu-item ab_dropdownitem action-menu-block"><a class="fl" href="javascript:;" dir=${getMessage('textDirection')} title=${host}>
-                    ${getMessage(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`);
+    searchResult.find('ol').append(`<li class="action-menu-item ab_dropdownitem action-menu-block">
+                                        <a class="fl" href="javascript:;" 
+                                        dir=${getMessage('textDirection')} 
+                                        title=${host}>${getMessage(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`);
     const menu = $(searchResult.find('.action-menu-block'));
     menu.on('click', () => {
         actions.blocklistPattern(host, blockState);
@@ -234,15 +240,6 @@ blocklist.serp.parseDomainFromSearchResult_ = function (searchResult) {
     // Identify domain by stripping protocol and path.
 };
 
-blocklist.serp.alterSearchResultNode_ = searchResult => {
-    const host = blocklist.serp.parseDomainFromSearchResult_(searchResult);
-    if (!host) return;
-
-    blocklist.serp.findBlockPatternForHost_(host) ?
-        searchResult.addClass('blocked') :
-        blocklist.serp.addLink(searchResult, host, false);
-};
-
 blocklist.serp.extractSubDomains_ = function (pattern) {
     const subDomains = [];
     const parts = pattern.split('.');
@@ -266,56 +263,27 @@ blocklist.serp.findBlockPatternForHost_ = function (hostName, hostList = blockli
     return matchedPattern;
 };
 
-blocklist.serp.hideSearchResults = () => {
-    searchElement.forEach(searchResult => {
-        searchResult = $(searchResult);
-        const matchedPattern = blocklist.serp.findBlockPatternForHost_(blocklist.serp.parseDomainFromSearchResult_(searchResult));
-        if (matchedPattern &&
-            ((searchResult.hasClass(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS) == false) &&
-                (searchResult.hasClass(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS) == false))) {
-            if (searchResult.hasClass(blocklist.serp.SHOWED_GWS_BLOCK_LINK_CLASS)) {
-                searchResult.removeClass(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS)
-                    .addClass(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS);
-            } else {
-                searchResult.addClass(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS);
-            }
-        }
-
-        if (!matchedPattern) {
-            if (searchResult.hasClass(blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS) ||
-                searchResult.hasClass(blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS)) {
-                searchResult.removeClass([blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS, blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS]);
-            }
-        }
-    })
-};
-
-/**
- * Iterates through search results, adding links and applying blocklist filter.
- * @private
- */
 blocklist.serp.modifySearchResults_ = () => {
-    // Skip if personalized web search was explicitly disabled (&pws=0).
     if (blocklist.serp.IsPwsDisabled_()) return;
 
-    // Apply blocklist filter.
-    if (blocklist.serp.blocklist.length > 0 || blocklist.serp.needsRefresh) {
-        blocklist.serp.hideSearchResults();
-    }
     let processedSearchResultList = blocklist.serp.getNodes(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
 
     // Add blocklist links to search results until all have been processed.
-    if (blocklist.serp.needsRefresh || processedSearchResultList.length < searchElement.length) {
+    if (processedSearchResultList.length < searchElement.length) {
+        let num=0;
         searchElement.forEach(e => {
             e = $(e);
             const host = blocklist.serp.parseDomainFromSearchResult_(e);
             blocklist.serp.linklist.push(host);
-            blocklist.serp.alterSearchResultNode_(e);
+            if(blocklist.serp.findBlockPatternForHost_(host)){
+                e.addClass('blocked');
+                num++
+            }else {
+                blocklist.serp.addLink(e, host, false);
+            }
         });
-
-        blocklist.serp.addBlockListNotification_();
-
-        blocklist.serp.needsRefresh = false;
+        console.log(num);
+        if(num) blocklist.serp.addBlockListNotification_();
     }
 };
 
@@ -340,10 +308,6 @@ blocklist.serp.IsPwsDisabled_ = () => {
     return document.URL.match(blocklist.serp.PWS_REGEX) !== null;
 };
 
-/**
- * Get event id of this search result page.
- * @private
- */
 blocklist.serp.getEventId_ = () => {
     blocklist.serp.eventId = 'null';
     try {
@@ -364,10 +328,9 @@ blocklist.serp.getEventId_ = () => {
  * Exposes a listener, so that it can accept refresh request from manager.
  */
 blocklist.serp.startBackgroundListeners = () => {
-    chrome.extension.onRequest.addListener((request, sender, sendResponse) => {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.type == blocklist.serp.REFRESH_REQUEST) {
             blocklist.serp.refreshBlocklist();
-            blocklist.serp.needsRefresh = true;
         } else if (request.type == blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
             document.write(request.html);
             chrome.runtime.sendMessage({type: blocklist.common.FINISHEXPORT});

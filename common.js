@@ -151,9 +151,3 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     blocklist.common.cmd[request.type](request).then(res => sendResponse(res));
     return true;
 });
-
-chrome.browserAction.onClicked.addListener(() => {
-    chrome.tabs.create({
-        url: './dist/index.html'
-    })
-});
