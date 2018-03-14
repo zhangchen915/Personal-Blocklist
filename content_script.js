@@ -1,19 +1,13 @@
 const blocklist = {
-    common : {
+    common: {
         GETBLOCKLIST: 'getBlocklist',
         ADDTOBLOCKLIST: 'addToBlocklist',
         ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
         DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
         FINISHEXPORT: 'finishExport'
     },
-    serp : {}
+    serp: {}
 };
-
-/**
- * List of the search results tags on Google SERP.
- * @type {[string]}
- */
-blocklist.serp.SEARCH_RESULT_TAGS = ['li', 'div'];
 
 /**
  * Class of the search results on Google SERP.
@@ -100,12 +94,6 @@ blocklist.serp.GWS_BLOCK_LINK_CLASS = 'kob';
 blocklist.serp.SHOWED_GWS_BLOCK_LINK_CLASS = 'kobb';
 
 /**
- * The interval between attempts to apply blocklist feats to SERP, in millisecs.
- * @type {number}
- */
-blocklist.serp.REPEAT_INTERVAL_IN_MS = 500;
-
-/**
  * Type of refresh request.
  * @type {string}
  */
@@ -133,214 +121,182 @@ blocklist.serp.PWS_REGEX = new RegExp('(&|[?])pws=0');
  */
 blocklist.serp.EVENT_ID_REGEX = new RegExp('kEI\\:"([^"]+)"');
 
-/**
- * The blocklisted patterns. Call blocklist.serp.refreshBlocklist to populate.
- * @type {Array.<string>}
- */
-blocklist.serp.blocklist = [];
-blocklist.serp.linklist = [];
-
-/**
- * The event id of the search result page.
- * @type {string}
- */
-blocklist.serp.eventId = '';
-
-/**
- * Whether the current search result page is https page.
- * The extension will not send info back to google via gen204 request if user is
- * under https page.
- * @type {bool}
- */
-blocklist.serp.isHttps = !!document.URL.indexOf('https://');
 const searchElement = $('.g');
-const getMessage = chrome.i18n.getMessage;
-const states = {
-    blocklistNotification: true,
-};
+const i18n = chrome.i18n.getMessage;
+const sendMessage = chrome.runtime.sendMessage;
 
-const actions = {
-    sendMessage: (cmd, pattern) => {
-        chrome.runtime.sendMessage({
-            type: cmd,
-            pattern: pattern,
-            ei: blocklist.serp.eventId,
-            enc: blocklist.serp.isHttps
-        }, response => {
-            if (response.success) {
-                blocklist.serp.refreshBlocklist();
-            }
-        })
-    },
-    addBlocklistPattern: pattern => {
-        actions.sendMessage(blocklist.common.ADDTOBLOCKLIST, pattern);
-    },
-    removeBlocklistPattern: pattern => {
-        actions.sendMessage(blocklist.common.DELETEFROMBLOCKLIST, pattern);
-    },
-    blocklistPattern: (pattern, blockState) => {
-        blockState ? actions.removeBlocklistPattern(pattern) : actions.addBlocklistPattern(pattern);
+class Action {
+    static sendCmd(cmd, pattern = '') {
+        return new Promise((resolve => {
+                sendMessage({
+                    type: cmd,
+                    pattern: pattern,
+                    ei: '', //eventId
+                    enc: !!document.URL.indexOf('https://')
+                }, response => {
+                    resolve(response)
+                })
+            })
+        )
+
+    };
+
+    static blocklistPattern(pattern, blockState) {
+        return blockState ? Action.sendCmd(blocklist.common.DELETEFROMBLOCKLIST, pattern) :
+            Action.sendCmd(blocklist.common.ADDTOBLOCKLIST, pattern);
     }
-};
+}
 
-blocklist.serp.addLink = (searchResult, host, blockState) => {
-    searchResult.find('ol').append(`<li class="action-menu-item ab_dropdownitem action-menu-block">
+class Serp {
+    constructor() {
+        this.blockNum = 0;
+        this.blockList = {};
+        this.linkList = [];
+        this.blocklistNotification = true;
+
+        this.getEventId_();
+        this.refreshBlocklist().then(() => {
+                this.modifySearchResults_();
+            }
+        );
+
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if (request.type === blocklist.serp.REFRESH_REQUEST) {
+                this.refreshBlocklist();
+            } else if (request.type === blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
+                document.write(request.html);
+                sendMessage({type: blocklist.common.FINISHEXPORT});
+            }
+        });
+    }
+
+
+    refreshBlocklist() {
+        return Action.sendCmd(blocklist.common.GETBLOCKLIST).then(response => {
+                if (response.blocklist) return this.blockList = response.blocklist;
+            }
+        );
+    };
+
+    addLink(searchResult, host, blockState) {
+        searchResult.find('ol').append(`<li class="action-menu-item ab_dropdownitem action-menu-block">
                                         <a class="fl" href="javascript:;" 
-                                        dir=${getMessage('textDirection')} 
-                                        title=${host}>${getMessage(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`);
-    const menu = $(searchResult.find('.action-menu-block'));
-    menu.on('click', () => {
-        actions.blocklistPattern(host, blockState);
-        menu.remove();
+                                        title="${host}">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`);
+        const menu = $(searchResult.find('.action-menu-block'));
+        menu.on('click', () => {
+            Action.blocklistPattern(host, blockState).then(() => {
+                this.refreshBlocklist()
+            });
+            menu.remove();
 
-        blocklist.serp.linklist.forEach((link, i) => {
-            const curElement = $(searchElement[i]);
-            if (host === link.split('.').slice(-host.split('.').length).join('.')) {
-                //TODO states.blocklistNotification
-                if (blockState) {
-                    curElement.removeClass('blocked blockedVisible');
-                    blocklist.serp.addLink(curElement, host, false)
-                } else {
-                    curElement.addClass('blocked').find('action-menu-block').remove();
-                    if (!states.blocklistNotification) {
-                        curElement.addClass('blockedVisible');
-                        blocklist.serp.addLink(curElement, host, true)
+            this.linkList.forEach((link, i) => {
+                const curElement = $(searchElement[i]);
+                if (host === link.split('.').slice(-host.split('.').length).join('.')) {
+                    //TODO states.blocklistNotification
+                    if (blockState) {
+                        curElement.removeClass('blocked blockedVisible');
+                        this.addLink(curElement, host, false)
+                    } else {
+                        curElement.addClass('blocked').find('action-menu-block').remove();
+                        if (!this.blocklistNotification) {
+                            curElement.addClass('blockedVisible');
+                            this.addLink(curElement, host, true)
+                        }
                     }
                 }
-            }
+            })
         })
-    })
-};
+    };
 
-blocklist.serp.addBlockListNotification_ = () => {
-    $('#res').append(`<div id="blocklistNotification" dir="${getMessage('textDirection')}">
-                        ${getMessage('blocklistNotification')}(<a href="javascript:;">${getMessage('showBlockedLink')}</a>)</div>`);
-    $('#blocklistNotification a').on('click', even => {
-        $('.blocked').forEach(e => {
-            e = $(e);
-            e.toggleClass('blockedVisible');
-            e.find('.action-menu-block').remove();
-            blocklist.serp.addLink(e, blocklist.serp.parseDomainFromSearchResult_(e), states.blocklistNotification);
-            even.target.innerText = getMessage(states.blocklistNotification ? 'cancel' : 'showBlockedLink');
-        });
-        states.blocklistNotification = !states.blocklistNotification;
-    })
-};
-
-blocklist.serp.getNodes = className => {
-    return $(`.${className}`);
-};
-
-blocklist.serp.parseDomainFromSearchResult_ = function (searchResult) {
-    // Sometimes, the link is an intermediate step through another google service,
-    // for example Google Translate. This regex parses the target url, so that we
-    // don't block translate.google.com instead of the target host.
-    return searchResult.find('h3 > a')[0].href.replace(blocklist.serp.REDIRECT_REGEX, '$7')
-        .replace(blocklist.common.HOST_REGEX, '$2');
-    // Identify domain by stripping protocol and path.
-};
-
-blocklist.serp.extractSubDomains_ = function (pattern) {
-    const subDomains = [];
-    const parts = pattern.split('.');
-    for (let i = parts.length - 2; i >= 0; --i) {
-        subDomains.push(parts.slice(i).join('.'));
+    addBlockListNotification_() {
+        $('#res').append(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
+                        ${i18n('blocklistNotification')}(<a href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`);
+        $('#blocklistNotification a').on('click', even => {
+            $('.blocked').forEach(e => {
+                e = $(e);
+                e.toggleClass('blockedVisible');
+                e.find('.action-menu-block').remove();
+                blocklist.serp.addLink(e, blocklist.serp.parseDomainFromSearchResult_(e), states.blocklistNotification);
+                even.target.innerText = i18n(states.blocklistNotification ? 'cancel' : 'showBlockedLink');
+            });
+            this.blocklistNotification = !this.blocklistNotification;
+        })
     }
-    return subDomains;
-};
 
-blocklist.serp.findBlockPatternForHost_ = function (hostName, hostList = blocklist.serp.blocklist) {
-    let matchedPattern = '';
-    // Match each level of subdomains against the blocklist. For example, if
-    // a.com is blocked, b.a.com should be hidden from search result.
-    const subdomains = blocklist.serp.extractSubDomains_(hostName);
-    subdomains.some(e => {
-        if (hostList[e]) {
-            matchedPattern = e;
-            return true;
+    parseDomainFromSearchResult_(searchResult) {
+        // Sometimes, the link is an intermediate step through another google service,
+        // for example Google Translate. This regex parses the target url, so that we
+        // don't block translate.google.com instead of the target host.
+        return searchResult.find('h3 > a')[0].href.replace(blocklist.serp.REDIRECT_REGEX, '$7')
+            .replace(blocklist.common.HOST_REGEX, '$2');
+        // Identify domain by stripping protocol and path.
+    };
+
+    extractSubDomains_(pattern) {
+        const subDomains = [];
+        const parts = pattern.split('.');
+        for (let i = parts.length - 2; i >= 0; --i) {
+            subDomains.push(parts.slice(i).join('.'));
         }
-    });
-    return matchedPattern;
-};
+        return subDomains;
+    };
 
-blocklist.serp.modifySearchResults_ = () => {
-    if (blocklist.serp.IsPwsDisabled_()) return;
-
-    let processedSearchResultList = blocklist.serp.getNodes(blocklist.serp.PERSONAL_BLOCKLIST_CLASS);
-
-    // Add blocklist links to search results until all have been processed.
-    if (processedSearchResultList.length < searchElement.length) {
-        let num=0;
-        searchElement.forEach(e => {
-            e = $(e);
-            const host = blocklist.serp.parseDomainFromSearchResult_(e);
-            blocklist.serp.linklist.push(host);
-            if(blocklist.serp.findBlockPatternForHost_(host)){
-                e.addClass('blocked');
-                num++
-            }else {
-                blocklist.serp.addLink(e, host, false);
+    findBlockPatternForHost_(hostName, hostList = this.blockList) {
+        let matchedPattern = '';
+        // Match each level of subdomains against the blocklist. For example, if
+        // a.com is blocked, b.a.com should be hidden from search result.
+        const subdomains = this.extractSubDomains_(hostName);
+        subdomains.some(e => {
+            if (hostList[e]) {
+                matchedPattern = e;
+                return true;
             }
         });
-        console.log(num);
-        if(num) blocklist.serp.addBlockListNotification_();
-    }
-};
+        return matchedPattern;
+    };
 
-/**
- * Retrieves blocklisted domains from localstorage.
- */
-blocklist.serp.refreshBlocklist = () => {
-    return new Promise(res => {
-        chrome.runtime.sendMessage({type: blocklist.common.GETBLOCKLIST}, response => {
-            if (response.blocklist) blocklist.serp.blocklist = response.blocklist;
-            res(response.blocklist)
-        });
-    })
-};
+    modifySearchResults_() {
+        if (this.IsPwsDisabled_()) return;
 
-/**
- * Check if personalized web search is disabled (pws parameter is 0).
- * @return {boolean} True if url indicates personalized web search was disabled.
- * @private
- */
-blocklist.serp.IsPwsDisabled_ = () => {
-    return document.URL.match(blocklist.serp.PWS_REGEX) !== null;
-};
+        let processedSearchResultList = $('.pb');
 
-blocklist.serp.getEventId_ = () => {
-    blocklist.serp.eventId = 'null';
-    try {
-        var head = document.getElementsByTagName('head')[0];
-        var scripts = head.getElementsByTagName('script');
-        for (var i = 0; i < scripts.length; i++) {
-            var script = scripts[i];
-            var match = script.text.match(blocklist.serp.EVENT_ID_REGEX);
-            if (match) {
-                blocklist.serp.eventId = match[1];
+        // Add blocklist links to search results until all have been processed.
+        if (processedSearchResultList.length < searchElement.length) {
+            searchElement.forEach(e => {
+                e = $(e);
+                const host = this.parseDomainFromSearchResult_(e);
+                this.linkList.push(host);
+                if (this.findBlockPatternForHost_(host)) {
+                    e.addClass('blocked');
+                    this.blockNum++
+                } else {
+                    this.addLink(e, host, false);
+                }
+            });
+            console.log(this.blockNum);
+            if (this.blockNum) this.addBlockListNotification_();
+        }
+    };
+
+    IsPwsDisabled_() {
+        return document.URL.match(blocklist.serp.PWS_REGEX) !== null;
+    };
+
+    getEventId_() {
+        blocklist.serp.eventId = 'null';
+        try {
+            var head = document.getElementsByTagName('head')[0];
+            var scripts = head.getElementsByTagName('script');
+            for (var i = 0; i < scripts.length; i++) {
+                var script = scripts[i];
+                var match = script.text.match(blocklist.serp.EVENT_ID_REGEX);
+                if (match) {
+                    blocklist.serp.eventId = match[1];
+                }
             }
+        } catch (e) {
         }
-    } catch (e) {
-    }
-};
+    };
+}
 
-/**
- * Exposes a listener, so that it can accept refresh request from manager.
- */
-blocklist.serp.startBackgroundListeners = () => {
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if (request.type == blocklist.serp.REFRESH_REQUEST) {
-            blocklist.serp.refreshBlocklist();
-        } else if (request.type == blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
-            document.write(request.html);
-            chrome.runtime.sendMessage({type: blocklist.common.FINISHEXPORT});
-        }
-    });
-};
-
-blocklist.serp.getEventId_();
-blocklist.serp.refreshBlocklist().then(() => {
-        blocklist.serp.modifySearchResults_();
-        blocklist.serp.startBackgroundListeners();
-    }
-);
+new Serp();
