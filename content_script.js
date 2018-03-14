@@ -5,99 +5,98 @@ const blocklist = {
         ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
         DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
         FINISHEXPORT: 'finishExport'
-    },
-    serp: {}
+    }
 };
 
 /**
  * Class of the search results on Google SERP.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_CLASS = 'g';
+blocklist.SEARCH_RESULT_CLASS = 'g';
 
 /**
  * Class to add to a search result after it was processed by the extension.
  * @type {string}
  */
-blocklist.serp.PERSONAL_BLOCKLIST_CLASS = 'pb';
+blocklist.PERSONAL_BLOCKLIST_CLASS = 'pb';
 
 /**
  * Class of blocked search results.
  * @type {string}
  */
-blocklist.serp.BLOCKED_SEARCH_RESULT_CLASS = 'blocked';
+blocklist.BLOCKED_SEARCH_RESULT_CLASS = 'blocked';
 
 /**
  * Class of blocked search results that were requested to be shown.
  * @type {string}
  */
-blocklist.serp.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS = 'blockedVisible';
+blocklist.BLOCKED_VISIBLE_SEARCH_RESULT_CLASS = 'blockedVisible';
 
 /**
  * Class of a element that holds block/unblock links.
  * @type {string}
  */
-blocklist.serp.BLOCK_LINK_CLASS = 'fl';
+blocklist.BLOCK_LINK_CLASS = 'fl';
 
 /**
  * Class of the search result bodies on Google SERP.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_BODY_CLASS = 's';
+blocklist.SEARCH_RESULT_BODY_CLASS = 's';
 
 /**
  * Class of the search results lower links on Google SERP.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_LOWER_LINKS_CLASS = 'gl';
+blocklist.SEARCH_RESULT_LOWER_LINKS_CLASS = 'gl';
 
 /**
  * Class that contains the cite tag on Google SERP.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_CITE_DIV_CLASS = 'kv';
+blocklist.SEARCH_RESULT_CITE_DIV_CLASS = 'kv';
 
 /**
  * Class of the short (snippet-less) search results links on Google SERP.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_SHORT_LINKS_CLASS = 'vshid';
+blocklist.SEARCH_RESULT_SHORT_LINKS_CLASS = 'vshid';
 
 /**
  * Class of lower links span for definition-like results (e.g. query "viagra").
  * @type {string}
  */
-blocklist.serp.DEFINITION_RESULT_LOWER_LINKS_CLASS = 'a';
+blocklist.DEFINITION_RESULT_LOWER_LINKS_CLASS = 'a';
 
 /**
  * Class of book search result table cell, used to identify book search results.
  * @type {string}
  */
-blocklist.serp.BOOK_SEARCH_RESULT_CLASS = 'bkst';
+blocklist.BOOK_SEARCH_RESULT_CLASS = 'bkst';
 
 /**
  * Class of the search results block div.
  * @type {string}
  */
-blocklist.serp.SEARCH_RESULT_BLOCK_CLASS = 'ires';
+blocklist.SEARCH_RESULT_BLOCK_CLASS = 'ires';
 
 /**
  * Class name that identifies gws-side block links.
  * @type {string}
  */
-blocklist.serp.GWS_BLOCK_LINK_CLASS = 'kob';
+blocklist.GWS_BLOCK_LINK_CLASS = 'kob';
 
 /**
  * Class name that identifies showed gws-side block links.
  * @type {string}
  */
-blocklist.serp.SHOWED_GWS_BLOCK_LINK_CLASS = 'kobb';
+blocklist.SHOWED_GWS_BLOCK_LINK_CLASS = 'kobb';
 
 /**
  * Type of refresh request.
  * @type {string}
  */
-blocklist.serp.REFRESH_REQUEST = 'refresh';
+blocklist.REFRESH_REQUEST = 'refresh';
 
 /**
  * A regular expression to deal with redirections through Google services,
@@ -105,7 +104,7 @@ blocklist.serp.REFRESH_REQUEST = 'refresh';
  * http://translate.google.com/translate?u=http://example.com
  * @type {RegExp}
  */
-blocklist.serp.REDIRECT_REGEX = new RegExp(
+blocklist.REDIRECT_REGEX = new RegExp(
     '^(https?://[a-z.]+[.]?google([.][a-z]{2,4}){1,2})?/' +
     '[a-z_-]*[?]((img)?u|.*&(img)?u)(rl)?=([^&]*[.][^&]*).*$');
 
@@ -113,13 +112,14 @@ blocklist.serp.REDIRECT_REGEX = new RegExp(
  * A regular expression to check if personalized web search is disabled in url.
  * @type {RegExp}
  */
-blocklist.serp.PWS_REGEX = new RegExp('(&|[?])pws=0');
+blocklist.PWS_REGEX = new RegExp('(&|[?])pws=0');
 
 /**
  * Matches the kEI javascript property defined in the header of the Google SRP.
  * @type {RegExp}
  */
-blocklist.serp.EVENT_ID_REGEX = new RegExp('kEI\\:"([^"]+)"');
+blocklist.EVENT_ID_REGEX = new RegExp('kEI\\:"([^"]+)"');
+blocklist.HOST_REGEX = new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$');
 
 const searchElement = $('.g');
 const i18n = chrome.i18n.getMessage;
@@ -161,9 +161,9 @@ class Serp {
         );
 
         chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-            if (request.type === blocklist.serp.REFRESH_REQUEST) {
+            if (request.type === blocklist.REFRESH_REQUEST) {
                 this.refreshBlocklist();
-            } else if (request.type === blocklist.serp.EXPORTTOGOOGLE_REQUEST) {
+            } else if (request.type === blocklist.EXPORTTOGOOGLE_REQUEST) {
                 document.write(request.html);
                 sendMessage({type: blocklist.common.FINISHEXPORT});
             }
@@ -216,7 +216,7 @@ class Serp {
                 e = $(e);
                 e.toggleClass('blockedVisible');
                 e.find('.action-menu-block').remove();
-                blocklist.serp.addLink(e, blocklist.serp.parseDomainFromSearchResult_(e), states.blocklistNotification);
+                blocklist.addLink(e, blocklist.parseDomainFromSearchResult_(e), states.blocklistNotification);
                 even.target.innerText = i18n(states.blocklistNotification ? 'cancel' : 'showBlockedLink');
             });
             this.blocklistNotification = !this.blocklistNotification;
@@ -227,8 +227,8 @@ class Serp {
         // Sometimes, the link is an intermediate step through another google service,
         // for example Google Translate. This regex parses the target url, so that we
         // don't block translate.google.com instead of the target host.
-        return searchResult.find('h3 > a')[0].href.replace(blocklist.serp.REDIRECT_REGEX, '$7')
-            .replace(blocklist.common.HOST_REGEX, '$2');
+        return searchResult.find('h3 > a')[0].href.replace(blocklist.REDIRECT_REGEX, '$7')
+            .replace(blocklist.HOST_REGEX, '$2');
         // Identify domain by stripping protocol and path.
     };
 
@@ -279,19 +279,19 @@ class Serp {
     };
 
     IsPwsDisabled_() {
-        return document.URL.match(blocklist.serp.PWS_REGEX) !== null;
+        return document.URL.match(blocklist.PWS_REGEX) !== null;
     };
 
     getEventId_() {
-        blocklist.serp.eventId = 'null';
+        blocklist.eventId = 'null';
         try {
             var head = document.getElementsByTagName('head')[0];
             var scripts = head.getElementsByTagName('script');
             for (var i = 0; i < scripts.length; i++) {
                 var script = scripts[i];
-                var match = script.text.match(blocklist.serp.EVENT_ID_REGEX);
+                var match = script.text.match(blocklist.EVENT_ID_REGEX);
                 if (match) {
-                    blocklist.serp.eventId = match[1];
+                    blocklist.eventId = match[1];
                 }
             }
         } catch (e) {
