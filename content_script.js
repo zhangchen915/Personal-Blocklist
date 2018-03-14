@@ -99,16 +99,6 @@ blocklist.SHOWED_GWS_BLOCK_LINK_CLASS = 'kobb';
 blocklist.REFRESH_REQUEST = 'refresh';
 
 /**
- * A regular expression to deal with redirections through Google services,
- * e.g. for translated results like
- * http://translate.google.com/translate?u=http://example.com
- * @type {RegExp}
- */
-blocklist.REDIRECT_REGEX = new RegExp(
-    '^(https?://[a-z.]+[.]?google([.][a-z]{2,4}){1,2})?/' +
-    '[a-z_-]*[?]((img)?u|.*&(img)?u)(rl)?=([^&]*[.][^&]*).*$');
-
-/**
  * A regular expression to check if personalized web search is disabled in url.
  * @type {RegExp}
  */
@@ -119,7 +109,6 @@ blocklist.PWS_REGEX = new RegExp('(&|[?])pws=0');
  * @type {RegExp}
  */
 blocklist.EVENT_ID_REGEX = new RegExp('kEI\\:"([^"]+)"');
-blocklist.HOST_REGEX = new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$');
 
 const searchElement = $('.g');
 const i18n = chrome.i18n.getMessage;
@@ -145,6 +134,10 @@ class Action {
         return blockState ? Action.sendCmd(blocklist.common.DELETEFROMBLOCKLIST, pattern) :
             Action.sendCmd(blocklist.common.ADDTOBLOCKLIST, pattern);
     }
+
+    static getDomain(searchResult) {
+        return searchResult.find('h3 > a')[0].href.replace('^https?://(www[.])?([0-9a-zA-Z.-]+).*$', '$2');
+    };
 }
 
 class Serp {
@@ -208,29 +201,21 @@ class Serp {
         })
     };
 
-    addBlockListNotification_() {
+    addBlockListNotification() {
         $('#res').append(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
                         ${i18n('blocklistNotification')}(<a href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`);
         $('#blocklistNotification a').on('click', even => {
-            $('.blocked').forEach(e => {
+            $('.g').forEach((e,i) => {
                 e = $(e);
-                e.toggleClass('blockedVisible');
-                e.find('.action-menu-block').remove();
-                blocklist.addLink(e, blocklist.parseDomainFromSearchResult_(e), states.blocklistNotification);
-                even.target.innerText = i18n(states.blocklistNotification ? 'cancel' : 'showBlockedLink');
+                if(e.hasClass('blocked')){
+                    e.toggleClass('blockedVisible').find('.action-menu-block').remove();
+                    this.addLink(e, this.linkList[i], this.blocklistNotification);
+                    even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
+                }
             });
             this.blocklistNotification = !this.blocklistNotification;
         })
     }
-
-    parseDomainFromSearchResult_(searchResult) {
-        // Sometimes, the link is an intermediate step through another google service,
-        // for example Google Translate. This regex parses the target url, so that we
-        // don't block translate.google.com instead of the target host.
-        return searchResult.find('h3 > a')[0].href.replace(blocklist.REDIRECT_REGEX, '$7')
-            .replace(blocklist.HOST_REGEX, '$2');
-        // Identify domain by stripping protocol and path.
-    };
 
     extractSubDomains_(pattern) {
         const subDomains = [];
@@ -264,7 +249,7 @@ class Serp {
         if (processedSearchResultList.length < searchElement.length) {
             searchElement.forEach(e => {
                 e = $(e);
-                const host = this.parseDomainFromSearchResult_(e);
+                const host = Action.getDomain(e);
                 this.linkList.push(host);
                 if (this.findBlockPatternForHost_(host)) {
                     e.addClass('blocked');
@@ -274,7 +259,7 @@ class Serp {
                 }
             });
             console.log(this.blockNum);
-            if (this.blockNum) this.addBlockListNotification_();
+            if (this.blockNum) this.addBlockListNotification();
         }
     };
 
