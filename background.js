@@ -1,5 +1,3 @@
-const GEN_204_URL = 'http://www.google.com/gen_204?';
-
 const blocklist = {};
 const storage = chrome.storage.local;
 
@@ -11,50 +9,28 @@ blocklist.common = {
     FINISHEXPORT: 'finishExport'
 };
 
-/**
- * Batch size for logging bulk added patterns to gen_204.
- * @type {int}
- */
-blocklist.LOG_BATCH_SIZE = 10;
-
-/**
- * Regular expression to strip whitespace.
- * @type {RegExp}
- */
-blocklist.STRIP_WHITESPACE_REGEX = new RegExp('^\s+|\s+$', 'g');
-
-/**
- * Logs an action by sending an XHR to www.google.com/gen_204.
- * The logging action may in the form of:
- * block/release [site].
- * @param {Object} request The detail request containing site and search event
- * id.
- * @private
- */
-blocklist.logAction_ = request => {
-    var site = request.pattern;
-    var eid = request.ei;
-    var action = request.type;
+function logAction (request) {
+    const site = request.pattern;
+    const eid = request.ei;
+    const action = request.type;
+    const GEN_204_URL = 'http://www.google.com/gen_204?';
     // Ignore logging when user is under https search result page.
-    if (request.enc) {
-        return;
-    }
-    var args = [
+    if (request.enc) return;
+    const args = [
         'atyp=i',
         'oi=site_blocker',
         'ct=' + action,
         'ei=' + eid,
         'cad=' + encodeURIComponent(site)
     ];
-    var url = GEN_204_URL + args.join('&');
+    const url = GEN_204_URL + args.join('&');
     try {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true /* async */);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
         xhr.send();
     } catch (e) {
-        // Unable to send XHR.
     }
-};
+}
 
 function getStorage(name = 'blocklist') {
     return new Promise((resolve) => {
@@ -85,7 +61,7 @@ blocklist.cmd = {
                     time: 0
                 };
                 setStorage(value.blocklist)
-                // blocklist.logAction_(request);
+                // logAction_(request);
             }
             return {success: 1, pattern: request.pattern};
         })
@@ -93,8 +69,8 @@ blocklist.cmd = {
     },
     'addBulkToBlocklist': request => {
         return getStorage().then(value => {
-            for(let i=0;i<request.patterns.length;i++){
-                if(!(request.patterns[i] in value.blocklist)){
+            for (let i = 0; i < request.patterns.length; i++) {
+                if (!(request.patterns[i] in value.blocklist)) {
                     value.blocklist[request.patterns[i]] = {
                         time: 0
                     };
@@ -103,8 +79,6 @@ blocklist.cmd = {
             setStorage(value.blocklist);
             return {success: 1};
         })
-
-
     },
     'deleteFromBlocklist': request => {
         return getStorage().then(value => {
@@ -115,12 +89,7 @@ blocklist.cmd = {
             }
             return {success: 1, pattern: request.pattern};
         });
-
-    },
-    'finishExport': () => {
-        chrome.management.setEnabled(
-            chrome.i18n.getMessage("@@extension_id"), localStorage['disabled'] !== 'true');
-    },
+    }
 };
 
 /**
