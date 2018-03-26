@@ -22,16 +22,6 @@ import {lighten} from 'material-ui/styles/colorManipulator';
 
 import {getStorage, deleteBlockList} from './data'
 
-let counter = 0;
-
-function createData(bl) {
-    let res = [];
-    for (const key of Object.keys(bl)) {
-        res.push({id: counter++, name: key, time: bl[key].time});
-    }
-    return res;
-}
-
 const columnData = [
     {id: 'url', numeric: false, disablePadding: true, label: 'url'},
     {id: 'time', numeric: true, disablePadding: false, label: 'time'}
@@ -176,9 +166,18 @@ class EnhancedTable extends React.Component {
             rowsPerPage: 15,
         };
 
-        getStorage().then(value => {
-            this.setState({data: createData(value.blocklist)})
-        })
+        this.initData()
+    }
+
+     initData() {
+         getStorage().then(value => {
+             let counter = 0;
+             let res = [];
+             for (const key of Object.keys(value.blocklist)) {
+                 res.push({id: counter++, name: key, time: value.blocklist[key].time});
+             }
+             this.setState({data: res})
+         })
     }
 
     handleRequestSort = (event, property) => {
@@ -241,7 +240,9 @@ class EnhancedTable extends React.Component {
         for (let i of this.state.selected) {
             data.push(this.state.data[i].name)
         }
-        deleteBlockList(data)
+        deleteBlockList(data).then(()=>{
+            this.initData()
+        })
     };
 
     render() {

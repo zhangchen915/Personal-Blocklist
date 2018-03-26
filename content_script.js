@@ -8,7 +8,7 @@ const blocklist = {
     }
 };
 
-const searchElement = $('.g');
+const searchElement = $('#search').find('.g');
 const i18n = chrome.i18n.getMessage;
 const sendMessage = chrome.runtime.sendMessage;
 
@@ -34,7 +34,7 @@ class Action {
     }
 
     static getDomain(searchResult) {
-        return searchResult.find('h3 > a')[0].href.replace('^https?://(www[.])?([0-9a-zA-Z.-]+).*$', '$2');
+        return searchResult.find('h3 > a')[0].href.replace(new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$'), '$2');
     };
 }
 

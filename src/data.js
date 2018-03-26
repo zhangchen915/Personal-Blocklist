@@ -13,9 +13,10 @@ function setStorage(value, name = 'blocklist') {
 }
 
 export function deleteBlockList(data) {
-    getStorage().then(res => {
+    return getStorage().then(res => {
+        res=res.blocklist;
         for (let url of data) {
-            if (res[url]) res[url] = null;
+            delete res[url];
         }
         setStorage(res)
     })
