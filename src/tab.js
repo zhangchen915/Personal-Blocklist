@@ -17,7 +17,6 @@ function TabContainer(props) {
 const styles = theme => ({
     root: {
         flexGrow: 1,
-        marginTop: theme.spacing.unit * 3,
         backgroundColor: theme.palette.background.paper,
     },
 });
@@ -39,14 +38,14 @@ class SimpleTabs extends React.Component {
             <div className={classes.root}>
                 <AppBar position="static">
                     <Tabs value={value} onChange={this.handleChange}>
-                        <Tab label="Item Two" />
-                        <Tab label="Item Two" />
-                        <Tab label="Item Three" href="#basic-tabs" />
+                        <Tab label="屏蔽管理" />
+                        <Tab label="设置" />
+                        <Tab label="关于" />
                     </Tabs>
                 </AppBar>
                 {value === 0 && <EnhancedTable />}
-                {value === 1 && <TabContainer>Item Two</TabContainer>}
-                {value === 2 && <TabContainer>Item Three</TabContainer>}
+                {value === 1 && <TabContainer></TabContainer>}
+                {value === 2 && <TabContainer></TabContainer>}
             </div>
         );
     }
