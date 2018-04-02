@@ -1,11 +1,10 @@
-const blocklist = {
-    common: {
-        GETBLOCKLIST: 'getBlocklist',
-        ADDTOBLOCKLIST: 'addToBlocklist',
-        ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
-        DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
-        FINISHEXPORT: 'finishExport'
-    }
+const COMMON = {
+    GETBLOCKLIST: 'getBlocklist',
+    ADDTOBLOCKLIST: 'addToBlocklist',
+    ADDBULKTOBLOCKLIST: 'importBlocklist',
+    DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
+    ADDTIME: 'addTime',
+    FINISHEXPORT: 'finishExport'
 };
 
 const searchElement = $('#search').find('.g');
@@ -25,12 +24,11 @@ class Action {
                 })
             })
         )
-
     };
 
     static blocklistPattern(pattern, blockState) {
-        return blockState ? Action.sendCmd(blocklist.common.DELETEFROMBLOCKLIST, pattern) :
-            Action.sendCmd(blocklist.common.ADDTOBLOCKLIST, pattern);
+        return blockState ? Action.sendCmd(COMMON.DELETEFROMBLOCKLIST, pattern) :
+            Action.sendCmd(COMMON.ADDTOBLOCKLIST, pattern);
     }
 
     static getDomain(searchResult) {
@@ -53,7 +51,7 @@ class Serp {
 
 
     refreshBlocklist() {
-        return Action.sendCmd(blocklist.common.GETBLOCKLIST).then(response => {
+        return Action.sendCmd(COMMON.GETBLOCKLIST).then(response => {
                 if (response.blocklist) return this.blockList = response.blocklist;
             }
         );
@@ -136,12 +134,12 @@ class Serp {
                 this.linkList.push(host);
                 if (this.findBlockPatternForHost_(host)) {
                     e.addClass('blocked');
+                    Action.sendCmd(COMMON.ADDTIME,host);
                     this.blockNum++
                 } else {
                     this.addLink(e, host, false);
                 }
             });
-            console.log(this.blockNum);
             if (this.blockNum) this.addBlockListNotification();
         }
     };

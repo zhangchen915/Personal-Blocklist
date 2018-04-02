@@ -1,14 +1,6 @@
 const blocklist = {};
 const storage = chrome.storage.local;
 
-blocklist.common = {
-    GETBLOCKLIST: 'getBlocklist',
-    ADDTOBLOCKLIST: 'addToBlocklist',
-    ADDBULKTOBLOCKLIST: 'addBulkToBlocklist',
-    DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
-    FINISHEXPORT: 'finishExport'
-};
-
 function logAction (request) {
     const site = request.pattern;
     const eid = request.ei;
@@ -58,7 +50,7 @@ blocklist.cmd = {
         return getStorage().then(value => {
             if (!value.blocklist[request.pattern]) {
                 value.blocklist[request.pattern] = {
-                    time: 0
+                    time: 1
                 };
                 setStorage(value.blocklist)
                 // logAction_(request);
@@ -67,7 +59,7 @@ blocklist.cmd = {
         })
 
     },
-    'addBulkToBlocklist': request => {
+    'importBlocklist': request => {
         return getStorage().then(value => {
             for (let i = 0; i < request.patterns.length; i++) {
                 if (!(request.patterns[i] in value.blocklist)) {
@@ -76,6 +68,13 @@ blocklist.cmd = {
                     };
                 }
             }
+            setStorage(value.blocklist);
+            return {success: 1};
+        })
+    },
+    'addTime': request => {
+        return getStorage().then(value => {
+            value.blocklist[request.pattern].time += 1;
             setStorage(value.blocklist);
             return {success: 1};
         })
