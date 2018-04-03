@@ -1,5 +1,5 @@
 {
-  "name": "2.6.1_0",
+  "name": "Personal-Blocklist",
   "version": "1.0.0",
   "description": "",
   "main": "common.js",
@@ -28,6 +28,6 @@
     "build": "webpack --config webpack.js",
     "start": "webpack-dev-server  --config webpack.js"
   },
-  "author": "",
+  "author": "zhangchen915",
   "license": "ISC"
 }
