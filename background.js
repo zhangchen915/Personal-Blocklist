@@ -1,7 +1,7 @@
 const blocklist = {};
 const storage = chrome.storage.local;
 
-function logAction (request) {
+function logAction(request) {
     const site = request.pattern;
     const eid = request.ei;
     const action = request.type;
@@ -36,6 +36,15 @@ function setStorage(value, name = 'blocklist') {
     storage.set(obj)
 }
 
+function assignBlocklist(value, list) {
+    for (let key in list) {
+        if (!value.blocklist.hasOwnProperty(key)){
+            value.blocklist[key] = {time: 0};
+        }
+    }
+    setStorage(value.blocklist);
+}
+
 blocklist.cmd = {
     'getBlocklist': request => {
         return getStorage().then(value => {
@@ -61,14 +70,7 @@ blocklist.cmd = {
     },
     'importBlocklist': request => {
         return getStorage().then(value => {
-            for (let i = 0; i < request.patterns.length; i++) {
-                if (!(request.patterns[i] in value.blocklist)) {
-                    value.blocklist[request.patterns[i]] = {
-                        time: 0
-                    };
-                }
-            }
-            setStorage(value.blocklist);
+            assignBlocklist(value, request.pattern);
             return {success: 1};
         })
     },
@@ -90,6 +92,28 @@ blocklist.cmd = {
         });
     }
 };
+
+chrome.runtime.onInstalled.addListener(() => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://zhangchen915.com/blocklist.json', true);
+    xhr.send(null);
+    console.log('in')
+
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+            const status = xhr.status;
+            const type = xhr.getResponseHeader('Content-type');
+            if (status >= 200 && status < 300 && type === 'application/json') {
+                getStorage().then(value => {
+                    try {
+                        assignBlocklist(value, JSON.parse(xhr.responseText))
+                    } catch (e) {
+                    }
+                })
+            }
+        }
+    }
+});
 
 /**
  * Provides read & write access to local storage for content scripts.
