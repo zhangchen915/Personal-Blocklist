@@ -172,8 +172,8 @@ class EnhancedTable extends React.Component {
          getStorage().then(value => {
              let counter = 0;
              let res = [];
-             for (const key of Object.keys(value.blocklist)) {
-                 res.push({id: counter++, name: key, time: value.blocklist[key].time});
+             for (const key of Object.keys(value)) {
+                 res.push({id: counter++, name: key, time: value[key].time});
              }
              this.setState({data: res})
          })
