@@ -1,4 +1,3 @@
-const blocklist = {};
 const storage = chrome.storage.local;
 
 function logAction(request) {
@@ -26,7 +25,7 @@ function logAction(request) {
 
 function getStorage(name = 'blocklist') {
     return new Promise((resolve) => {
-        storage.get(name, value => resolve(value))
+        storage.get(name, value => resolve(value[name]))
     })
 }
 
@@ -38,30 +37,35 @@ function setStorage(value, name = 'blocklist') {
 
 function assignBlocklist(value, list) {
     for (let key in list) {
-        if (!value.blocklist.hasOwnProperty(key)){
-            value.blocklist[key] = {time: 0};
+        if (!value.hasOwnProperty(key)) {
+            value[key] = {time: 0};
         }
     }
-    setStorage(value.blocklist);
+    setStorage(value);
 }
 
-blocklist.cmd = {
+const cmd = {
+    'init': (name, data = {}) => {
+        getStorage(name).then(value => {
+            if (!value) setStorage(data, name)
+        });
+    },
     'getBlocklist': request => {
         return getStorage().then(value => {
-            if (!value.blocklist) setStorage(value.blocklist = {});
+            if (!value) setStorage(value = {});
             if (request.num !== undefined && request.num > 0) {
-                value.blocklist = value.blocklist.slice(request.start, request.start + request.num);
+                value = value.slice(request.start, request.start + request.num);
             }
-            return {blocklist: value.blocklist};
+            return {blocklist: value};
         });
     },
     'addToBlocklist': request => {
         return getStorage().then(value => {
-            if (!value.blocklist[request.pattern]) {
-                value.blocklist[request.pattern] = {
+            if (!value[request.pattern]) {
+                value[request.pattern] = {
                     time: 1
                 };
-                setStorage(value.blocklist)
+                setStorage(value)
                 // logAction_(request);
             }
             return {success: 1, pattern: request.pattern};
@@ -76,29 +80,26 @@ blocklist.cmd = {
     },
     'addTime': request => {
         return getStorage().then(value => {
-            value.blocklist[request.pattern].time += 1;
-            setStorage(value.blocklist);
+            value[request.pattern].time += 1;
+            setStorage(value);
             return {success: 1};
         })
     },
     'deleteFromBlocklist': request => {
         return getStorage().then(value => {
-            if (value.blocklist[request.pattern]) {
-                value.blocklist[request.pattern] = null;
-                setStorage(value.blocklist)
-                // blocklist.logAction_(request);
+            if (value[request.pattern]) {
+                value[request.pattern] = null;
+                setStorage(value)
             }
             return {success: 1, pattern: request.pattern};
         });
     }
 };
 
-chrome.runtime.onInstalled.addListener(() => {
+function getDefaultList() {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', 'https://zhangchen915.com/blocklist.json', true);
     xhr.send(null);
-    console.log('in')
-
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             const status = xhr.status;
@@ -113,13 +114,18 @@ chrome.runtime.onInstalled.addListener(() => {
             }
         }
     }
+}
+
+chrome.runtime.onInstalled.addListener(() => {
+    cmd.init('config', {
+        autoUpdate: true
+    });
+    cmd.init('blocklist');
+    getDefaultList();
 });
 
-/**
- * Provides read & write access to local storage for content scripts.
- */
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    blocklist.cmd[request.type](request).then(res => sendResponse(res));
+    cmd[request.type](request).then(res => sendResponse(res));
     return true;
 });
 
