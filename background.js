@@ -1,26 +1,17 @@
 const storage = chrome.storage.local;
 
 function logAction(request) {
-    const site = request.pattern;
-    const eid = request.ei;
-    const action = request.type;
-    const GEN_204_URL = 'http://www.google.com/gen_204?';
-    // Ignore logging when user is under https search result page.
-    if (request.enc) return;
-    const args = [
-        'atyp=i',
-        'oi=site_blocker',
-        'ct=' + action,
-        'ei=' + eid,
-        'cad=' + encodeURIComponent(site)
-    ];
-    const url = GEN_204_URL + args.join('&');
-    try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.send();
-    } catch (e) {
-    }
+    fetch('https://gb.zhangchen915.com/', {
+        method: 'POST',
+        body: JSON.stringify({
+            action:request.type,
+            site:request.pattern,
+            eid:request.ei
+        }),
+        headers: new Headers({
+            'Content-Type': 'application/json'
+        })
+    })
 }
 
 function getStorage(name = 'blocklist') {
@@ -97,23 +88,12 @@ const cmd = {
 };
 
 function getDefaultList() {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://zhangchen915.com/blocklist.json', true);
-    xhr.send(null);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            const status = xhr.status;
-            const type = xhr.getResponseHeader('Content-type');
-            if (status >= 200 && status < 300 && type === 'application/json') {
-                getStorage().then(value => {
-                    try {
-                        assignBlocklist(value, JSON.parse(xhr.responseText))
-                    } catch (e) {
-                    }
-                })
-            }
-        }
-    }
+    fetch('https://zhangchen915.com/blocklist.json')
+        .then(response => {
+            getStorage().then(value => {
+                assignBlocklist(value, response.json())
+            })
+        })
 }
 
 chrome.runtime.onInstalled.addListener(() => {
