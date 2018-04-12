@@ -590,7 +590,8 @@
     "storage",
     "tabs",
     "management",
-    "https://www.google.com/*"
+    "https://www.google.com/*",
+    "https://*.zhangchen915.com/"
   ],
   "version": "0.0.1"
 }

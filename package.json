@@ -4,6 +4,7 @@
   "description": "",
   "main": "common.js",
   "dependencies": {
+    "classnames": "^2.2.5",
     "material-ui": "^1.0.0-beta.36",
     "material-ui-icons": "^1.0.0-beta.36",
     "react": "^16.2.0",
