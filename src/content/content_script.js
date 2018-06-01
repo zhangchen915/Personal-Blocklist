@@ -1,3 +1,7 @@
+import {addClass, removeClass, hasClass} from 'dom-helpers/class'
+import {$, parseHTML, extractSubDomains} from './util'
+import './main.css'
+
 const COMMON = {
     GETBLOCKLIST: 'getBlocklist',
     ADDTOBLOCKLIST: 'addToBlocklist',
@@ -6,8 +10,7 @@ const COMMON = {
     ADDTIME: 'addTime',
     FINISHEXPORT: 'finishExport'
 };
-
-const searchElement = $('#search').find('.g');
+const searchElement = $('#search').querySelectorAll('.g');
 const i18n = chrome.i18n.getMessage;
 const sendMessage = chrome.runtime.sendMessage;
 
@@ -32,7 +35,7 @@ class Action {
     }
 
     static getDomain(searchResult) {
-        return searchResult.find('h3 > a')[0].href.replace(new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$'), '$2');
+        return searchResult.querySelector('h3 > a').href.replace(new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$'), '$2');
     };
 }
 
@@ -58,27 +61,30 @@ class Serp {
     };
 
     addLink(searchResult, host, blockState) {
-        searchResult.find('ol').append(`<li class="action-menu-item ab_dropdownitem action-menu-block">
+        const ol = searchResult.querySelector('ol');
+        if (!ol) return;
+        ol.append(parseHTML(`<li class="action-menu-item action-menu-block">
                                         <a class="fl" href="javascript:;" 
-                                        title="${host}">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`);
-        const menu = $(searchResult.find('.action-menu-block'));
-        menu.on('click', () => {
+                                        title="${host}">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
+        const menu = searchResult.querySelector('.action-menu-block');
+        menu.addEventListener('click', () => {
             Action.blocklistPattern(host, blockState).then(() => {
                 this.refreshBlocklist()
             });
             menu.remove();
 
             this.linkList.forEach((link, i) => {
-                const curElement = $(searchElement[i]);
+                const curElement = searchElement[i];
                 if (host === link.split('.').slice(-host.split('.').length).join('.')) {
                     //TODO states.blocklistNotification
                     if (blockState) {
-                        curElement.removeClass('blocked blockedVisible');
+                        removeClass(curElement, 'blocked');
+                        removeClass(curElement, 'blockedVisible');
                         this.addLink(curElement, host, false)
                     } else {
-                        curElement.addClass('blocked').find('action-menu-block').remove();
+                        addClass(curElement, 'blocked');
                         if (!this.blocklistNotification) {
-                            curElement.addClass('blockedVisible');
+                            addClass(curElement, 'blockedVisible');
                             this.addLink(curElement, host, true)
                         }
                     }
@@ -88,13 +94,14 @@ class Serp {
     };
 
     addBlockListNotification() {
-        $('#res').append(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
-                        ${i18n('blocklistNotification')}(<a id="toggleNotification" href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`);
-        $('#toggleNotification').on('click', even => {
-            $('.g').forEach((e, i) => {
-                e = $(e);
-                if (e.hasClass('blocked')) {
-                    e.toggleClass('blockedVisible').find('.action-menu-block').remove();
+        $('#res').append(parseHTML(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
+                        ${i18n('blocklistNotification')}(<a id="toggleNotification" href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`));
+        $('#toggleNotification').addEventListener('click', even => {
+            document.querySelectorAll('.g').forEach((e, i) => {
+                if (hasClass(e, 'blocked')) {
+                    const block = e.querySelector('.action-menu-block');
+                    hasClass(e, 'blockedVisible') ? removeClass(e, 'blockedVisible') : addClass(e, 'blockedVisible');
+                    if (block) block.remove();
                     this.addLink(e, this.linkList[i], this.blocklistNotification);
                     even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
                 }
@@ -103,20 +110,9 @@ class Serp {
         })
     }
 
-    extractSubDomains(pattern) {
-        const subDomains = [];
-        const parts = pattern.split('.');
-        for (let i = parts.length - 2; i >= 0; --i) {
-            subDomains.push(parts.slice(i).join('.'));
-        }
-        return subDomains;
-    };
-
     findBlockPatternForHost_(hostName, hostList = this.blockList) {
         let matchedPattern = '';
-        // Match each level of subdomains against the blocklist. For example, if
-        // a.com is blocked, b.a.com should be hidden from search result.
-        this.extractSubDomains(hostName).some(e => {
+        extractSubDomains(hostName).some(e => {
             if (hostList[e]) {
                 matchedPattern = e;
                 return true;
@@ -126,15 +122,14 @@ class Serp {
     };
 
     modifySearchResults_() {
-        const processedSearchResultList = $('.pb');
+        const processedSearchResultList = document.querySelectorAll('.pb');
         if (processedSearchResultList.length < searchElement.length) {
             searchElement.forEach(e => {
-                e = $(e);
                 const host = Action.getDomain(e);
                 this.linkList.push(host);
                 if (this.findBlockPatternForHost_(host)) {
-                    e.addClass('blocked');
-                    Action.sendCmd(COMMON.ADDTIME,host);
+                    addClass(e, 'blocked');
+                    Action.sendCmd(COMMON.ADDTIME, host);
                     this.blockNum++
                 } else {
                     this.addLink(e, host, false);
