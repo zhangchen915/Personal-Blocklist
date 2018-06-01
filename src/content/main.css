@@ -1,0 +1,22 @@
+a.ab_button {
+    background: inherit!important;
+}
+
+.ab_dropdown{
+    z-index: 999;
+}
+
+.blocked {
+    display: none;
+}
+
+.blockedVisible {
+    display: block;
+    background-color: #FFD2D2
+}
+
+#blocklistNotification {
+    font-style: italic;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

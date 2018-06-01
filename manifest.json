@@ -1,7 +1,7 @@
 {
   "background": {
     "scripts": [
-      "background.js"
+      "dist/background.js"
     ],
     "persistent": false
   },
@@ -12,11 +12,7 @@
   "content_scripts": [
     {
       "js": [
-        "zepto.min.js",
-        "content_script.js"
-      ],
-      "css": [
-        "css/main.css"
+        "dist/content_script.js"
       ],
       "matches": [
         "https://www.google.ad/",

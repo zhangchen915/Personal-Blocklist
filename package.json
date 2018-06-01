@@ -27,6 +27,7 @@
   },
   "scripts": {
     "build": "webpack --config webpack.js",
+    "build-bg": "webpack --config webpack-bg.js",
     "start": "webpack-dev-server  --config webpack.js"
   },
   "author": "zhangchen915",
