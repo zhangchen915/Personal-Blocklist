@@ -5,6 +5,7 @@ import Tabs, { Tab } from 'material-ui/Tabs';
 import Typography from 'material-ui/Typography';
 
 import EnhancedTable from  './table';
+import {Config} from "./config";
 
 function TabContainer(props) {
     return (
@@ -44,7 +45,7 @@ class SimpleTabs extends React.Component {
                     </Tabs>
                 </AppBar>
                 {value === 0 && <EnhancedTable />}
-                {value === 1 && <TabContainer></TabContainer>}
+                {value === 1 && <Config/>}
                 {value === 2 && <TabContainer></TabContainer>}
             </div>
         );
