@@ -17,16 +17,13 @@ function extractSubDomains(pattern) {
     return subDomains;
 }
 
-async function someSync(array, callback) {
-    for (let [index, item] of Object.entries(array)) {
-        if (await callback(item, index, this)) return true
+export async function findBlockPatternForHost(hostName) {
+    for (let [_, item] of Object.entries(extractSubDomains(hostName))) {
+        const response = await Action.sendCmd('find', item);
+        if (response.success) return true
     }
 
     return false
-}
-
-export async function findBlockPatternForHost(hostName) {
-    return await someSync(extractSubDomains(hostName));
 }
 
 export class Action {
@@ -35,7 +32,6 @@ export class Action {
                 chrome.runtime.sendMessage({
                     type: cmd,
                     pattern: pattern,
-                    ei: '', //eventId
                     enc: !!document.URL.indexOf('https://')
                 }, response => {
                     resolve(response)
@@ -45,8 +41,7 @@ export class Action {
     };
 
     static blocklistPattern(pattern, blockState) {
-        return blockState ? Action.sendCmd('delete', pattern) :
-            Action.sendCmd('add', pattern);
+        return Action.sendCmd(blockState ? 'delete' : 'add', pattern);
     }
 
     static getDomain(searchResult) {

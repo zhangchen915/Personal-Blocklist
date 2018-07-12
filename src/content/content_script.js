@@ -1,64 +1,17 @@
 import {addClass, removeClass, hasClass} from 'dom-helpers/class'
-import {$, parseHTML, extractSubDomains} from './util'
+import {$, parseHTML, Action, findBlockPatternForHost} from './util'
 import './main.css'
 
-const COMMON = {
-    GETBLOCKLIST: 'getBlocklist',
-    ADDTOBLOCKLIST: 'addToBlocklist',
-    ADDBULKTOBLOCKLIST: 'importBlocklist',
-    DELETEFROMBLOCKLIST: 'deleteFromBlocklist',
-    ADDTIME: 'addTime',
-    FINISHEXPORT: 'finishExport'
-};
 const searchElement = $('#search').querySelectorAll('.g');
 const i18n = chrome.i18n.getMessage;
-const sendMessage = chrome.runtime.sendMessage;
-
-class Action {
-    static sendCmd(cmd, pattern = '') {
-        return new Promise((resolve => {
-                sendMessage({
-                    type: cmd,
-                    pattern: pattern,
-                    ei: '', //eventId
-                    enc: !!document.URL.indexOf('https://')
-                }, response => {
-                    resolve(response)
-                })
-            })
-        )
-    };
-
-    static blocklistPattern(pattern, blockState) {
-        return blockState ? Action.sendCmd(COMMON.DELETEFROMBLOCKLIST, pattern) :
-            Action.sendCmd(COMMON.ADDTOBLOCKLIST, pattern);
-    }
-
-    static getDomain(searchResult) {
-        return searchResult.querySelector('h3 > a').href.replace(new RegExp('^https?://(www[.])?([0-9a-zA-Z.-]+).*$'), '$2');
-    };
-}
 
 class Serp {
     constructor() {
         this.blockNum = 0;
-        this.blockList = {};
         this.linkList = [];
         this.blocklistNotification = true;
-
-        this.refreshBlocklist().then(() => {
-                this.modifySearchResults_();
-            }
-        );
+        this.modifySearchResults();
     }
-
-
-    refreshBlocklist() {
-        return Action.sendCmd(COMMON.GETBLOCKLIST).then(response => {
-                if (response.blocklist) return this.blockList = response.blocklist;
-            }
-        );
-    };
 
     addLink(searchResult, host, blockState) {
         const ol = searchResult.querySelector('ol');
@@ -68,9 +21,7 @@ class Serp {
                                         title="${host}">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
         const menu = searchResult.querySelector('.action-menu-block');
         menu.addEventListener('click', () => {
-            Action.blocklistPattern(host, blockState).then(() => {
-                this.refreshBlocklist()
-            });
+            Action.blocklistPattern(host, blockState);
             menu.remove();
 
             this.linkList.forEach((link, i) => {
@@ -110,33 +61,20 @@ class Serp {
         })
     }
 
-    findBlockPatternForHost_(hostName, hostList = this.blockList) {
-        let matchedPattern = '';
-        extractSubDomains(hostName).some(e => {
-            if (hostList[e]) {
-                matchedPattern = e;
-                return true;
-            }
-        });
-        return matchedPattern;
-    };
+    modifySearchResults() {
+        Promise.all(Array.from(searchElement).map(async e => {
+            const host = Action.getDomain(e);
+            this.linkList.push(host);
 
-    modifySearchResults_() {
-        const processedSearchResultList = document.querySelectorAll('.pb');
-        if (processedSearchResultList.length < searchElement.length) {
-            searchElement.forEach(e => {
-                const host = Action.getDomain(e);
-                this.linkList.push(host);
-                if (this.findBlockPatternForHost_(host)) {
-                    addClass(e, 'blocked');
-                    Action.sendCmd(COMMON.ADDTIME, host);
-                    this.blockNum++
-                } else {
-                    this.addLink(e, host, false);
-                }
-            });
+            if (await findBlockPatternForHost(host)) {
+                addClass(e, 'blocked');
+                this.blockNum++
+            } else {
+                this.addLink(e, host, false);
+            }
+        })).then(() => {
             if (this.blockNum) this.addBlockListNotification();
-        }
+        })
     };
 }
 
