@@ -1,24 +1,46 @@
-import {api} from './api';
+import Dexie from 'dexie';
 
-export function getStorage(name = 'blocklist') {
-    return new Promise(resolve => {
-        api.storage.get(name, value => {
-           resolve(value[name])
+export class Domain {
+    constructor() {
+        this.db = new Dexie("GB");
+        this.db.version(2).stores({
+            banDomain: "++id, &domain, time"
+        });
+
+        this.banDomain = this.db.banDomain;
+    }
+
+    add(domain) {
+        return this.banDomain.add({domain: domain, time: 1}).then(() => ({success: 1}));
+    }
+
+    bulkAdd() {
+        this.banDomain.bulkAdd([{name: "Foo"}, {name: "Bar"}]);
+    }
+
+    find(domain) {
+        return this.banDomain.get({domain: domain}).then(res => {
+            return {success: !!res}
         })
-    })
-}
+    }
 
-function setStorage(value, name = 'blocklist') {
-    let obj = {};
-    obj[name] = value;
-    api.storage.set(obj)
-}
+    findWithAddTime(domain) {
+        return this.banDomain.where("banDomain")
+            .equals(domain)
+            .modify(e => e.time++)
+            .then(() => ({success: true}))
+    }
 
-export function deleteBlockList(data) {
-    return getStorage().then(res => {
-        for (let url of data) {
-            delete res[url];
-        }
-        setStorage(res)
-    })
+    delete(domain) {
+        return this.banDomain.where("banDomain")
+            .equals(domain)
+            .delete()
+            .then(deleteCount => ({success: deleteCount}));
+    }
+
+    pagination(page, num = 20) {
+        return this.banDomain
+            .where('id')
+            .inAnyRange([num * (page - 1), num * page]).toArray();
+    }
 }
