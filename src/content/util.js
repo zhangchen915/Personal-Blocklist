@@ -41,7 +41,7 @@ export class Action {
     };
 
     static blocklistPattern(pattern, blockState) {
-        return Action.sendCmd(blockState ? 'delete' : 'add', pattern);
+        return Action.sendCmd(blockState ? 'remove' : 'add', pattern);
     }
 
     static getDomain(searchResult) {

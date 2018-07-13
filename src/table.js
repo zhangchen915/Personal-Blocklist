@@ -20,7 +20,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 import {lighten} from 'material-ui/styles/colorManipulator';
 
-import {getStorage, deleteBlockList} from './data'
+import {Domain} from './data'
 
 const columnData = [
     {id: 'url', numeric: false, disablePadding: true, label: 'url'},
@@ -165,10 +165,17 @@ class EnhancedTable extends React.Component {
             rowsPerPage: 15,
         };
 
+        this.domain=new Domain();
         this.initData()
     }
 
      initData() {
+        this.domain.pagination(this.state.page).then(res=>{
+            console.log(res)
+            this.setState({data: res})
+        });
+
+
          getStorage().then(value => {
              let counter = 0;
              let res = [];
@@ -239,7 +246,7 @@ class EnhancedTable extends React.Component {
         for (let i of this.state.selected) {
             data.push(this.state.data[i].name)
         }
-        deleteBlockList(data).then(()=>{
+        this.domain.remove(data).then(()=>{
             this.initData()
         })
     };

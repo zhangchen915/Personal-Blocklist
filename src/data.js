@@ -31,7 +31,7 @@ export class Domain {
             .then(() => ({success: true}))
     }
 
-    delete(domain) {
+    remove(domain) {
         return this.banDomain.where("banDomain")
             .equals(domain)
             .delete()
@@ -41,6 +41,8 @@ export class Domain {
     pagination(page, num = 20) {
         return this.banDomain
             .where('id')
-            .inAnyRange([num * (page - 1), num * page]).toArray();
+            .inAnyRange([num * (page - 1), num * page]).toArray().then(res=>{
+                return res
+            });
     }
 }
