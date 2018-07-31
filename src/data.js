@@ -11,11 +11,11 @@ export class Domain {
     }
 
     add(domain) {
-        return this.banDomain.add({domain: domain, time: 1}).then(() => ({success: 1}));
+        return this.banDomain.add({domain: domain, time: 1}).then(() => ({success: true}));
     }
 
-    bulkAdd() {
-        this.banDomain.bulkAdd([{name: "Foo"}, {name: "Bar"}]);
+    bulkAdd(domains) {
+        return this.banDomain.bulkAdd(domains).then(() => ({success: true}));
     }
 
     find(domain) {
@@ -38,11 +38,11 @@ export class Domain {
             .then(deleteCount => ({success: deleteCount}));
     }
 
-    pagination(page, num = 20) {
+    pagination(state) {
+        const {page, rowsPerPage} = state;
         return this.banDomain
             .where('id')
-            .inAnyRange([num * (page - 1), num * page]).toArray().then(res=>{
-                return res
-            });
+            .inAnyRange([[num * (page - 1), rowsPerPage * page]])
+            .toArray().then(res => res);
     }
 }

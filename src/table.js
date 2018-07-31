@@ -161,29 +161,16 @@ class EnhancedTable extends React.Component {
             orderBy: 'calories',
             selected: [],
             data: [],
-            page: 0,
+            page: 1,
             rowsPerPage: 15,
         };
 
-        this.domain=new Domain();
-        this.initData()
+        this.domain = new Domain();
+        this.initData();
     }
 
-     initData() {
-        this.domain.pagination(this.state.page).then(res=>{
-            console.log(res)
-            this.setState({data: res})
-        });
-
-
-         getStorage().then(value => {
-             let counter = 0;
-             let res = [];
-             for (const key of Object.keys(value)) {
-                 res.push({id: counter++, name: key, time: value[key].time});
-             }
-             this.setState({data: res})
-         })
+    initData() {
+        this.domain.pagination(this.state).then(res=>this.setState({data: res}));
     }
 
     handleRequestSort = (event, property) => {
@@ -244,7 +231,7 @@ class EnhancedTable extends React.Component {
     handleDelete = () => {
         let data = [];
         for (let i of this.state.selected) {
-            data.push(this.state.data[i].name)
+            data.push(this.state.data[i].domain)
         }
         this.domain.remove(data).then(()=>{
             this.initData()
@@ -287,7 +274,7 @@ class EnhancedTable extends React.Component {
                                         <TableCell padding="checkbox">
                                             <Checkbox checked={isSelected}/>
                                         </TableCell>
-                                        <TableCell padding="none">{n.name}</TableCell>
+                                        <TableCell padding="none">{n.domain}</TableCell>
                                         <TableCell numeric>{n.time}</TableCell>
                                     </TableRow>
                                 );
