@@ -31,18 +31,15 @@ export class Domain {
             .then(() => ({success: true}))
     }
 
-    remove(domain) {
-        return this.banDomain.where("banDomain")
-            .equals(domain)
-            .delete()
-            .then(deleteCount => ({success: deleteCount}));
+    remove(ids) {
+        return this.banDomain.bulkDelete(ids);
     }
 
     pagination(state) {
         const {page, rowsPerPage} = state;
         return this.banDomain
             .where('id')
-            .inAnyRange([[num * (page - 1), rowsPerPage * page]])
-            .toArray().then(res => res);
+            .inAnyRange([[rowsPerPage * (page - 1), rowsPerPage * page]])
+            .toArray();
     }
 }

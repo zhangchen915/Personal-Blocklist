@@ -229,11 +229,12 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     handleDelete = () => {
-        let data = [];
+        let ids = [];
         for (let i of this.state.selected) {
-            data.push(this.state.data[i].domain)
+            ids.push(this.state.ids[i - 1].id)
         }
-        this.domain.remove(data).then(()=>{
+        this.domain.remove(ids).then(() => {
+            this.setState({selected: []});
             this.initData()
         })
     };
