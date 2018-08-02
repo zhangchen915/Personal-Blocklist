@@ -11,37 +11,42 @@ class Serp {
         this.linkList = [];
         this.blocklistNotification = true;
         this.modifySearchResults();
+        this.evenDelegates();
+    }
+
+    evenDelegates(){
+        $('#ires').addEventListener('click', e => {
+            if (e.target.matches('.action-button')) {
+                const {host, blockState} = e.target.dataset;
+                
+                Action.blocklistPattern(host, blockState);
+                this.linkList.forEach((link, i) => {
+                    const curElement = searchElement[i];
+                    if (host === link.split('.').slice(-host.split('.').length).join('.')) {
+                        if (blockState) {
+                            removeClass(curElement, 'blocked');
+                            removeClass(curElement, 'blockedVisible');
+                            e.target.setAttribute("blockState", false);
+                            e.target.innerText = i18n('blockLinkPrefix')
+                         } else {
+                            addClass(curElement, 'blocked');
+                            if (!this.blocklistNotification) {
+                                addClass(curElement, 'blockedVisible');
+                                e.target.setAttribute("blockState", true);
+                                e.target.innerText = i18n('unblockLinkPrefix')
+                             }
+                         }
+                     }
+                 })
+            }
+        })
     }
 
     addLink(searchResult, host, blockState) {
         const ol = searchResult.querySelector('ol');
         if (!ol) return;
         ol.append(parseHTML(`<li class="action-menu-item action-menu-block">
-                                        <a class="fl" href="javascript:;" 
-                                        title="${host}">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
-        const menu = searchResult.querySelector('.action-menu-block');
-        menu.addEventListener('click', () => {
-            Action.blocklistPattern(host, blockState);
-            menu.remove();
-
-            this.linkList.forEach((link, i) => {
-                const curElement = searchElement[i];
-                if (host === link.split('.').slice(-host.split('.').length).join('.')) {
-                    //TODO states.blocklistNotification
-                    if (blockState) {
-                        removeClass(curElement, 'blocked');
-                        removeClass(curElement, 'blockedVisible');
-                        this.addLink(curElement, host, false)
-                    } else {
-                        addClass(curElement, 'blocked');
-                        if (!this.blocklistNotification) {
-                            addClass(curElement, 'blockedVisible');
-                            this.addLink(curElement, host, true)
-                        }
-                    }
-                }
-            })
-        })
+                                        <a class="fl action-button" data-host="${host}" data-blockState="${blockState}" href="javascript:;">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
     };
 
     addBlockListNotification() {
