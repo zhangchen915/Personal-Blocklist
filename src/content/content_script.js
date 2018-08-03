@@ -57,11 +57,10 @@ class Serp {
                 if (hasClass(e, 'blocked')) {
                     const block = e.querySelector('.action-menu-block');
                     hasClass(e, 'blockedVisible') ? removeClass(e, 'blockedVisible') : addClass(e, 'blockedVisible');
-                    if (block) block.remove();
-                    this.addLink(e, this.linkList[i], this.blocklistNotification);
-                    even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
+                    if (!block) this.addLink(e, this.linkList[i], this.blocklistNotification);
                 }
             });
+            even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
             this.blocklistNotification = !this.blocklistNotification;
         })
     }
