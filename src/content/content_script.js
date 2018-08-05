@@ -2,7 +2,8 @@ import {addClass, removeClass, hasClass} from 'dom-helpers/class'
 import {$, parseHTML, Action, findBlockPatternForHost} from './util'
 import './main.css'
 
-const searchElement = $('#search').querySelectorAll('.g');
+const $g = $('#search').querySelectorAll('.g');
+const $ires = $('#ires');
 const i18n = chrome.i18n.getMessage;
 
 class Serp {
@@ -14,68 +15,51 @@ class Serp {
         this.evenDelegates();
     }
 
-    evenDelegates(){
-        $('#ires').addEventListener('click', e => {
+    evenDelegates() {
+        $ires.addEventListener('click', e => {
             if (e.target.matches('.action-button')) {
-                const {host, blockState} = e.target.dataset;
-                
-                Action.blocklistPattern(host, blockState);
+                let {host, block} = e.target.dataset;
+                block = block === 'true';
+                Action.blocklistPattern(host, block);
                 this.linkList.forEach((link, i) => {
-                    const curElement = searchElement[i];
                     if (host === link.split('.').slice(-host.split('.').length).join('.')) {
-                        if (blockState) {
-                            removeClass(curElement, 'blocked');
-                            removeClass(curElement, 'blockedVisible');
-                            e.target.setAttribute("blockState", false);
-                            e.target.innerText = i18n('blockLinkPrefix')
-                         } else {
-                            addClass(curElement, 'blocked');
-                            if (!this.blocklistNotification) {
-                                addClass(curElement, 'blockedVisible');
-                                e.target.setAttribute("blockState", true);
-                                e.target.innerText = i18n('unblockLinkPrefix')
-                             }
-                         }
-                     }
-                 })
+                        block ? removeClass($g[i], 'blocked') : addClass($g[i], 'blocked');
+                        e.target.setAttribute("data-block", !block);
+                        e.target.innerText = i18n(block ? 'blockLinkPrefix' : 'unblockLinkPrefix');
+                    }
+                })
             }
         })
     }
 
-    addLink(searchResult, host, blockState) {
+    addLink(searchResult, host, block) {
         const ol = searchResult.querySelector('ol');
         if (!ol) return;
         ol.append(parseHTML(`<li class="action-menu-item action-menu-block">
-                                        <a class="fl action-button" data-host="${host}" data-blockState="${blockState}" href="javascript:;">${i18n(blockState ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
+                                        <a class="fl action-button" data-host="${host}" data-block="${block}" href="javascript:;">${i18n(block ? 'unblockLinkPrefix' : 'blockLinkPrefix')}</a></li>`));
     };
 
     addBlockListNotification() {
-        $('#res').append(parseHTML(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
+        $ires.append(parseHTML(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
                         ${i18n('blocklistNotification')}(<a id="toggleNotification" href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`));
         $('#toggleNotification').addEventListener('click', even => {
-            document.querySelectorAll('.g').forEach((e, i) => {
-                if (hasClass(e, 'blocked')) {
-                    const block = e.querySelector('.action-menu-block');
-                    hasClass(e, 'blockedVisible') ? removeClass(e, 'blockedVisible') : addClass(e, 'blockedVisible');
-                    if (!block) this.addLink(e, this.linkList[i], this.blocklistNotification);
-                }
-            });
+            hasClass($ires, 'blockedVisible') ? removeClass($ires, 'blockedVisible') : addClass($ires, 'blockedVisible');
             even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
             this.blocklistNotification = !this.blocklistNotification;
         })
     }
 
     modifySearchResults() {
-        Promise.all(Array.from(searchElement).map(async e => {
+        Promise.all(Array.from($g).map(async e => {
             const host = Action.getDomain(e);
             this.linkList.push(host);
+            const block = await findBlockPatternForHost(host);
 
-            if (await findBlockPatternForHost(host)) {
+            if (block) {
                 addClass(e, 'blocked');
-                this.blockNum++
-            } else {
-                this.addLink(e, host, false);
+                this.blockNum++;
             }
+            this.addLink(e, host, block);
         })).then(() => {
             if (this.blockNum) this.addBlockListNotification();
         })

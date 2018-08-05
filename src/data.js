@@ -11,7 +11,7 @@ export class Domain {
     }
 
     add(domain) {
-        return this.banDomain.add({domain: domain, time: 1}).then(() => ({success: true}));
+        return this.banDomain.add({domain: domain, time: 1});
     }
 
     delete(domain) {

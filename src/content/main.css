@@ -1,18 +1,18 @@
 a.ab_button {
-    background: inherit!important;
+    background: inherit !important;
 }
 
-.ab_dropdown{
+.ab_dropdown {
     z-index: 999;
+}
+
+.blockedVisible .blocked {
+    display: block;
+    background-color: #FFD2D2;
 }
 
 .blocked {
     display: none;
-}
-
-.blockedVisible {
-    display: block;
-    background-color: #FFD2D2
 }
 
 #blocklistNotification {
