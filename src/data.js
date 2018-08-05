@@ -14,6 +14,12 @@ export class Domain {
         return this.banDomain.add({domain: domain, time: 1}).then(() => ({success: true}));
     }
 
+    delete(domain) {
+        return this.banDomain.where("domain")
+            .equals(domain)
+            .delete()
+    }
+
     bulkAdd(domains) {
         return this.banDomain.bulkAdd(domains).then(() => ({success: true}));
     }
