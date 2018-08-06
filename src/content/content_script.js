@@ -8,11 +8,20 @@ const i18n = chrome.i18n.getMessage;
 
 class Serp {
     constructor() {
-        this.blockNum = 0;
+        this._blockNum = 0;
         this.linkList = [];
         this.blocklistNotification = true;
         this.modifySearchResults();
         this.evenDelegates();
+    }
+
+    set blockNum(val) {
+        this.$blocklistNotification.classList[val ? 'add' : 'remove']('show')
+        this._blockNum = val;
+    }
+
+    get blockNum() {
+        return this._blockNum;
     }
 
     evenDelegates() {
@@ -23,6 +32,7 @@ class Serp {
                 Action.blocklistPattern(host, block);
                 this.linkList.forEach((link, i) => {
                     if (host === link.split('.').slice(-host.split('.').length).join('.')) {
+                        this.blockNum += (block ? -1 : 1);
                         block ? removeClass($g[i], 'blocked') : addClass($g[i], 'blocked');
                         e.target.setAttribute("data-block", !block);
                         e.target.innerText = i18n(block ? 'blockLinkPrefix' : 'unblockLinkPrefix');
@@ -42,26 +52,26 @@ class Serp {
     addBlockListNotification() {
         $ires.append(parseHTML(`<div id="blocklistNotification" dir="${i18n('textDirection')}">
                         ${i18n('blocklistNotification')}(<a id="toggleNotification" href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`));
-        $('#toggleNotification').addEventListener('click', even => {
+        this.$blocklistNotification = $('#blocklistNotification');
+        this.$blocklistNotification.addEventListener('click', even => {
             hasClass($ires, 'blockedVisible') ? removeClass($ires, 'blockedVisible') : addClass($ires, 'blockedVisible');
             even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
             this.blocklistNotification = !this.blocklistNotification;
-        })
+        });
     }
 
     modifySearchResults() {
-        Promise.all(Array.from($g).map(async e => {
+        this.addBlockListNotification();
+        Array.from($g).map(async e => {
             const host = Action.getDomain(e);
             this.linkList.push(host);
             const block = await findBlockPatternForHost(host);
 
             if (block) {
                 addClass(e, 'blocked');
-                this.blockNum++;
+                this.blockNum += 1;
             }
             this.addLink(e, host, block);
-        })).then(() => {
-            if (this.blockNum) this.addBlockListNotification();
         })
     };
 }

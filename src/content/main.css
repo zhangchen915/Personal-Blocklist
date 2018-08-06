@@ -1,3 +1,7 @@
+.show {
+    display: block !important;
+}
+
 a.ab_button {
     background: inherit !important;
 }
@@ -11,7 +15,7 @@ a.ab_button {
     background-color: #FFD2D2;
 }
 
-.blocked {
+.blocked, #blocklistNotification {
     display: none;
 }
 
