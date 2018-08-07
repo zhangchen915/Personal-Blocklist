@@ -6,7 +6,6 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "dexie": "^2.0.4",
-    "dom-helpers": "^3.3.1",
     "material-ui": "^1.0.0-beta.36",
     "material-ui-icons": "^1.0.0-beta.36",
     "react": "^16.2.0",

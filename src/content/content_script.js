@@ -1,4 +1,3 @@
-import {addClass, removeClass, hasClass} from 'dom-helpers/class'
 import {$, parseHTML, Action, findBlockPatternForHost} from './util'
 import './main.css'
 
@@ -16,7 +15,7 @@ class Serp {
     }
 
     set blockNum(val) {
-        this.$blocklistNotification.classList[val ? 'add' : 'remove']('show')
+        this.$blocklistNotification.classList[val ? 'add' : 'remove']('show');
         this._blockNum = val;
     }
 
@@ -33,7 +32,7 @@ class Serp {
                 this.linkList.forEach((link, i) => {
                     if (host === link.split('.').slice(-host.split('.').length).join('.')) {
                         this.blockNum += (block ? -1 : 1);
-                        block ? removeClass($g[i], 'blocked') : addClass($g[i], 'blocked');
+                        $g[i].classList[!block ? 'add' : 'remove']('blocked');
                         e.target.setAttribute("data-block", !block);
                         e.target.innerText = i18n(block ? 'blockLinkPrefix' : 'unblockLinkPrefix');
                     }
@@ -54,7 +53,7 @@ class Serp {
                         ${i18n('blocklistNotification')}(<a id="toggleNotification" href="javascript:;">${i18n('showBlockedLink')}</a>)</div>`));
         this.$blocklistNotification = $('#blocklistNotification');
         this.$blocklistNotification.addEventListener('click', even => {
-            hasClass($ires, 'blockedVisible') ? removeClass($ires, 'blockedVisible') : addClass($ires, 'blockedVisible');
+            $ires.classList.toggle('blockedVisible');
             even.target.innerText = i18n(this.blocklistNotification ? 'cancel' : 'showBlockedLink');
             this.blocklistNotification = !this.blocklistNotification;
         });
@@ -68,7 +67,7 @@ class Serp {
             const block = await findBlockPatternForHost(host);
 
             if (block) {
-                addClass(e, 'blocked');
+                e.classList.add('blocked');
                 this.blockNum += 1;
             }
             this.addLink(e, host, block);
