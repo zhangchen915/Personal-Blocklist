@@ -31,10 +31,10 @@ export class Domain {
     }
 
     findWithAddTime(domain) {
-        return this.banDomain.where("banDomain")
+        return this.banDomain.where("domain")
             .equals(domain)
             .modify(e => e.time++)
-            .then(() => ({success: true}))
+            .then(res => ({success: !!res}))
     }
 
     remove(ids) {
