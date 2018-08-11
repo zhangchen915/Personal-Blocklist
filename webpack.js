@@ -1,11 +1,11 @@
-const path=require('path');
+const path = require('path');
 const webpack = require('webpack');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        vendor: ['react', 'react-dom','material-ui'],
+        vendor: ['react', 'react-dom', 'material-ui'],
         app: './src/index.js'
     },
 
@@ -25,15 +25,15 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env','react'],
-                        plugins: ["transform-class-properties"]
+                        presets: ['env', 'react'],
+                        plugins: ["transform-class-properties", "transform-runtime"]
                     }
                 }
 
             },
             {
                 test: /\.css$/,
-                use: ['style-loader','css-loader']
+                use: ['style-loader', 'css-loader']
             }
         ]
     },
@@ -45,7 +45,7 @@ module.exports = {
 
     plugins: [
         new HtmlWebpackPlugin({
-            template:'./src/index.html'
+            template: './src/index.html'
         }),
         new UglifyJSPlugin(),
         new webpack.HotModuleReplacementPlugin()
