@@ -26,25 +26,6 @@ export async function findBlockPatternForHost(hostName) {
     return false
 }
 
-export async function readText() {
-    return new Promise((resolve, reject) => {
-        chrome.fileSystem.chooseEntry({type: 'openFile'}, readOnlyEntry => {
-            readOnlyEntry.file(file => {
-                const reader = new FileReader();
-
-                reader.onerror = () => {
-                    reject('readText false')
-                };
-                reader.onloadend = e => {
-                    resolve(e.target.result);
-                };
-
-                reader.readAsText(file);
-            });
-        })
-    });
-}
-
 export class Action {
     static sendCmd(cmd, pattern = '') {
         return new Promise(resolve => {

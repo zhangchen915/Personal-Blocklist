@@ -1,8 +1,10 @@
 import React from 'react';
-import Checkbox from 'material-ui/Checkbox';
-import { FormGroup, FormControlLabel } from 'material-ui/Form';
-
-import {getStorage} from './data'
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Input from '@material-ui/core/Input';
 
 export class Config extends React.Component {
     constructor(props, context) {
@@ -11,17 +13,6 @@ export class Config extends React.Component {
         this.state = {
             autoUpdate: true,
         };
-
-        this.initData()
-    }
-
-    initData() {
-        getStorage('config').then(value => {
-                for (let name in value) {
-                    if (value.hasOwnProperty(name)) this.setState({[name]: value.name})
-                }
-            }
-        )
     }
 
     handleChange = name => event => {
@@ -34,18 +25,29 @@ export class Config extends React.Component {
         const {autoUpdate} = this.state;
 
         return (
-            <FormGroup>
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            value="autoUpdate"
-                            checked={autoUpdate}
-                            onChange={this.handleChange}/>
-                    }
-                    label="自动更新"
-                />
+            <div>
+                <FormGroup>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                value="autoUpdate"
+                                checked={autoUpdate}
+                                onChange={this.handleChange}/>
+                        }
+                        label="自动更新"
+                    />
 
-            </FormGroup>
+                </FormGroup>
+                <FormControl fullWidth>
+                    <InputLabel htmlFor="import-domain">导入域名</InputLabel>
+                    <Input
+                        id="import-domain"
+                        placeholder="每行一个域名"
+                        multiline={true}
+                        rows={10}
+                    />
+                </FormControl>
+            </div>
         )
     }
 }
