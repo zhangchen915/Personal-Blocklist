@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        vendor: ['react', 'react-dom', 'material-ui'],
+        vendor: ['react', 'react-dom', '@material-ui/core'],
         app: './src/index.js'
     },
 
