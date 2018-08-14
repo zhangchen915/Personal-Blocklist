@@ -45,9 +45,9 @@ class SimpleTabs extends React.Component {
                         <Tab label="关于" />
                     </Tabs>
                 </AppBar>
-                {value === 0 && <EnhancedTable />}
-                {value === 1 && <Config/>}
-                {value === 2 && <TabContainer></TabContainer>}
+                {value === 0 && <EnhancedTable {...this.props}/>}
+                {value === 1 && <Config {...this.props}/>}
+                {value === 2 && <TabContainer {...this.props} />}
             </div>
         );
     }

@@ -1,7 +1,8 @@
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
+import SimpleTabs from './tab';
+
 import './index.css';
+import {Domain} from './data';
 
-import SimpleTabs from './tab'
-
-render(<SimpleTabs />, document.querySelector('#app'));
+render( <SimpleTabs db={new Domain()}/>, document.querySelector('#app'));

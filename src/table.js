@@ -18,8 +18,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 
-import {Domain} from './data'
-
 const columnData = [
     {id: 'url', numeric: false, disablePadding: true, label: 'url'},
     {id: 'time', numeric: true, disablePadding: false, label: 'time'}
@@ -163,12 +161,11 @@ class EnhancedTable extends React.Component {
             rowsPerPage: 15,
         };
 
-        this.domain = new Domain();
         this.initData();
     }
 
     initData() {
-        this.domain.pagination(this.state).then(res=>this.setState({data: res}));
+        this.props.db.pagination(this.state).then(res=>this.setState({data: res}));
     }
 
     handleRequestSort = (event, property) => {
@@ -231,7 +228,7 @@ class EnhancedTable extends React.Component {
         for (let i of this.state.selected) {
             ids.push(this.state.ids[i - 1].id)
         }
-        this.domain.remove(ids).then(() => {
+        this.props.db.remove(ids).then(() => {
             this.setState({selected: []});
             this.initData()
         })
