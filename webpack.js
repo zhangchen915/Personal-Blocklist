@@ -4,6 +4,7 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+    mode: "production",
     entry: {
         vendor: ['react', 'react-dom', '@material-ui/core'],
         app: './src/index.js'
@@ -47,7 +48,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: './src/index.html'
         }),
-        new UglifyJSPlugin(),
         new webpack.HotModuleReplacementPlugin()
     ],
 
