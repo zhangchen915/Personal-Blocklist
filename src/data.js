@@ -10,6 +10,10 @@ export class Domain {
         this.banDomain = this.db.banDomain;
     }
 
+    count() {
+        return this.banDomain.count();
+    }
+
     add(domain) {
         return this.banDomain.add({domain: domain, time: 1});
     }
@@ -45,7 +49,7 @@ export class Domain {
         const {page, rowsPerPage} = state;
         return this.banDomain
             .where('id')
-            .inAnyRange([[rowsPerPage * (page - 1), rowsPerPage * page]])
+            .inAnyRange([[rowsPerPage * page, rowsPerPage * (page + 1)]])
             .toArray();
     }
 }

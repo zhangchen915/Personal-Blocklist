@@ -149,15 +149,15 @@ const styles = theme => ({
 });
 
 class EnhancedTable extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+    constructor() {
+        super();
 
         this.state = {
             order: 'asc',
             orderBy: 'calories',
             selected: [],
             data: [],
-            page: 1,
+            page: 0,
             rowsPerPage: 15,
         };
 
@@ -165,7 +165,15 @@ class EnhancedTable extends React.Component {
     }
 
     initData() {
-        this.props.db.pagination(this.state).then(res=>this.setState({data: res}));
+        this.setState({selected: []});
+
+        this.props.db.count().then(res => {
+            this.setState({page: Math.ceil(res / this.state.rowsPerPage)});
+        });
+
+        this.props.db.pagination(this.state).then(res => {
+            this.setState({data: res});
+        });
     }
 
     handleRequestSort = (event, property) => {
@@ -186,7 +194,7 @@ class EnhancedTable extends React.Component {
 
     handleSelectAllClick = (event, checked) => {
         if (checked) {
-            this.setState({selected: this.state.data.map(n => n.id)});
+            this.setState({selected: [...this.state.data.keys()]});
             return;
         }
         this.setState({selected: []});
@@ -224,12 +232,7 @@ class EnhancedTable extends React.Component {
     isSelected = id => this.state.selected.indexOf(id) !== -1;
 
     handleDelete = () => {
-        let ids = [];
-        for (let i of this.state.selected) {
-            ids.push(this.state.ids[i - 1].id)
-        }
-        this.props.db.remove(ids).then(() => {
-            this.setState({selected: []});
+        this.props.db.remove(this.state.selected.map(i => this.state.data[i].id)).then(() => {
             this.initData()
         })
     };
@@ -255,16 +258,16 @@ class EnhancedTable extends React.Component {
                             rowCount={data.length}
                         />
                         <TableBody>
-                            {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(n => {
-                                const isSelected = this.isSelected(n.id);
+                            {data.map((n, id) => {
+                                const isSelected = this.isSelected(id);
                                 return (
                                     <TableRow
                                         hover
-                                        onClick={event => this.handleClick(event, n.id)}
+                                        onClick={event => this.handleClick(event, id)}
                                         role="checkbox"
                                         aria-checked={isSelected}
                                         tabIndex={-1}
-                                        key={n.id}
+                                        key={id}
                                         selected={isSelected}
                                     >
                                         <TableCell padding="checkbox">
