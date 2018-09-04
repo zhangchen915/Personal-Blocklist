@@ -72,6 +72,8 @@ class Serp {
             }
             this.addLink(e, host, block);
         })
+
+        Action.sendCmd('num', this.blockNum);
     };
 }
 

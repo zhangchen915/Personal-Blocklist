@@ -34,7 +34,13 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    banDomain[request.type](request.pattern).then(res => sendResponse(res));
+    if (request.type === 'num' && request.pattern) chrome.browserAction.setBadgeText({
+        text: String(request.pattern)
+    });
+
+    if(banDomain.hasOwnProperty(request.type)){
+        banDomain[request.type](request.pattern).then(res => sendResponse(res));
+    }
     return true;
 });
 

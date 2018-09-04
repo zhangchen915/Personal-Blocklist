@@ -149,8 +149,8 @@ const styles = theme => ({
 });
 
 class EnhancedTable extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = {
             order: 'asc',
@@ -166,7 +166,6 @@ class EnhancedTable extends React.Component {
 
     initData() {
         this.setState({selected: []});
-
         this.props.db.count().then(res => {
             this.setState({page: Math.ceil(res / this.state.rowsPerPage)});
         });
