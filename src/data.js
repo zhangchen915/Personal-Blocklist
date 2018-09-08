@@ -38,7 +38,6 @@ export class Domain {
         return this.banDomain.where("domain")
             .equals(domain)
             .modify(e => e.time++)
-            .then(res => ({success: !!res}))
     }
 
     remove(ids) {

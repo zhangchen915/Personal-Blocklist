@@ -61,7 +61,7 @@ class Serp {
 
     modifySearchResults() {
         this.addBlockListNotification();
-        Array.from($g).map(async e => {
+        Promise.all(Array.from($g).map(async e => {
             const host = Action.getDomain(e);
             this.linkList.push(host);
             const block = await findBlockPatternForHost(host);
@@ -71,9 +71,9 @@ class Serp {
                 this.blockNum += 1;
             }
             this.addLink(e, host, block);
+        })).then(() => {
+            Action.sendCmd('num', this.blockNum);
         })
-
-        Action.sendCmd('num', this.blockNum);
     };
 }
 

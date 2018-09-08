@@ -38,9 +38,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         text: String(request.pattern)
     });
 
-    if(banDomain.hasOwnProperty(request.type)){
-        banDomain[request.type](request.pattern).then(res => sendResponse(res));
-    }
+    if (banDomain[request.type]) banDomain[request.type](request.pattern).then(res => sendResponse(res));
     return true;
 });
 

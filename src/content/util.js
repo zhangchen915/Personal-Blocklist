@@ -20,9 +20,8 @@ function extractSubDomains(pattern) {
 export async function findBlockPatternForHost(hostName) {
     for (let [_, item] of Object.entries(extractSubDomains(hostName))) {
         const response = await Action.sendCmd('findWithAddTime', item);
-        if (response.success) return true
+        if (response) return true
     }
-
     return false
 }
 
