@@ -34,7 +34,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.type === 'num' && request.pattern) chrome.browserAction.setBadgeText({
+    if (request.type === 'num') chrome.browserAction.setBadgeText({
         text: String(request.pattern)
     });
 

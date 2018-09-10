@@ -1,4 +1,4 @@
-import {$, parseHTML, Action, findBlockPatternForHost} from './util'
+import {$, parseHTML, Action, findBlockPatternForHost, handleVisibilityChange} from './util'
 import './main.css'
 
 const $g = $('#search').querySelectorAll('.g');
@@ -72,7 +72,10 @@ class Serp {
             }
             this.addLink(e, host, block);
         })).then(() => {
-            Action.sendCmd('num', this.blockNum);
+            handleVisibilityChange(this.blockNum);
+            document.addEventListener("visibilitychange", () => {
+                handleVisibilityChange(this.blockNum)
+            }, false);
         })
     };
 }

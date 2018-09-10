@@ -25,6 +25,17 @@ export async function findBlockPatternForHost(hostName) {
     return false
 }
 
+export const handleVisibilityChange = (blockNum) => {
+    switch (document.visibilityState) {
+        case 'visible':
+            Action.sendCmd('num', blockNum);
+            break;
+        case 'hidden':
+            Action.sendCmd('num', '');
+            break;
+    }
+}
+
 export class Action {
     static sendCmd(cmd, pattern = '') {
         return new Promise(resolve => {
