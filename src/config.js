@@ -1,10 +1,8 @@
 import React from 'react';
-import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Input from '@material-ui/core/Input';
+import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -14,7 +12,9 @@ export class Config extends React.Component {
 
         this.state = {
             autoUpdate: true,
-            domains: ''
+            domains: '',
+            snackbarOpen: false,
+            snackbarMsg: ''
         };
     }
 
@@ -25,29 +25,19 @@ export class Config extends React.Component {
     bulkAdd() {
         if (!this.state.domains) return;
         this.props.db.bulkAdd(this.state.domains.split('\n').filter(e => !!e).map(e => ({domain: e}))).then(() => {
-            this.setState({domains: ''});
-        })
+            this.setState({
+                domains: '',
+                snackbarOpen: true,
+                snackbarMsg: ''
+            });
+        }).catch('BulkError', err => {
+        });
     }
 
-
     render() {
-        const {classes} = this.props;
-        const {autoUpdate} = this.state;
-
         return (
-            <div>
-                <FormGroup>
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                value="autoUpdate"
-                                checked={autoUpdate}/>
-                        }
-                        label="自动更新"
-                    />
-
-                </FormGroup>
-                <FormControl fullWidth>
+            <div style={{ padding: 20 }}>
+               <FormControl fullWidth>
                     <InputLabel htmlFor="import-domain">导入域名</InputLabel>
                     <Input
                         id="import-domain"
@@ -62,6 +52,14 @@ export class Config extends React.Component {
                         <SaveIcon/>保存
                     </Button>
                 </FormControl>
+
+                <Snackbar
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center'}}
+                    open={this.state.snackbarOpen}
+                    autoHideDuration={1500}
+                    onClose={()=>{this.setState({snackbarOpen: false})}}
+                    message={this.state.snackbarMsg || '保存成功'}
+                />
             </div>
         )
     }
