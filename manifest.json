@@ -7,7 +7,7 @@
   },
   "browser_action": {
     "default_icon": "images/icon.png",
-    "default_title": "Personal Blocklist"
+    "default_title": "New Personal Blocklist"
   },
   "content_scripts": [
     {
@@ -581,13 +581,12 @@
     "48": "images/icon.png"
   },
   "manifest_version": 2,
-  "name": "Personal Blocklist",
+  "name": "New Personal Blocklist",
   "permissions": [
     "storage",
     "tabs",
     "management",
-    "https://www.google.com/*",
-    "https://*.zhangchen915.com/"
+    "https://www.google.com/*"
   ],
-  "version": "0.0.1"
+  "version": "1.0.0"
 }

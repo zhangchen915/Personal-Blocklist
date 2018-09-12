@@ -34,7 +34,7 @@ export const handleVisibilityChange = (blockNum) => {
             Action.sendCmd('num', '');
             break;
     }
-}
+};
 
 export class Action {
     static sendCmd(cmd, pattern = '') {
