@@ -29,7 +29,7 @@
     "webpack-dev-server": "^3.1.1"
   },
   "scripts": {
-    "build": "webpack --config webpack.js",
+    "build": "npm run build-bg & webpack --config webpack.js",
     "build-bg": "webpack --config webpack-bg.js",
     "start": "webpack-dev-server --config webpack.js"
   },

@@ -1,7 +1,7 @@
 const path=require('path');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
+    mode: "production",
     entry: {
         background: './src/content/background.js',
         content_script: './src/content/content_script.js'
@@ -35,8 +35,4 @@ module.exports = {
             }
         ]
     },
-
-    plugins: [
-        new UglifyJSPlugin()
-    ]
 };
