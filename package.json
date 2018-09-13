@@ -9,6 +9,7 @@
     "@material-ui/icons": "^3.0.1",
     "classnames": "^2.2.6",
     "dexie": "^2.0.4",
+    "github-profile-card": "^2.0.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2"
   },

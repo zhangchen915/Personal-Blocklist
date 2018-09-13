@@ -1,20 +1,12 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import {withStyles} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 
-import EnhancedTable from  './table';
+import EnhancedTable from './table';
 import {Config} from "./config";
-
-function TabContainer(props) {
-    return (
-        <Typography component="div" style={{ padding: 8 * 3 }}>
-            {props.children}
-        </Typography>
-    );
-}
+import {About} from "./about";
 
 const styles = theme => ({
     root: {
@@ -29,25 +21,25 @@ class SimpleTabs extends React.Component {
     };
 
     handleChange = (event, value) => {
-        this.setState({ value });
+        this.setState({value});
     };
 
     render() {
-        const { classes } = this.props;
-        const { value } = this.state;
+        const {classes} = this.props;
+        const {value} = this.state;
 
         return (
             <div className={classes.root}>
                 <AppBar position="static">
                     <Tabs value={value} onChange={this.handleChange}>
-                        <Tab label="屏蔽管理" />
-                        <Tab label="设置" />
-                        <Tab label="关于" />
+                        <Tab label="屏蔽管理"/>
+                        <Tab label="设置"/>
+                        <Tab label="关于"/>
                     </Tabs>
                 </AppBar>
                 {value === 0 && <EnhancedTable {...this.props}/>}
                 {value === 1 && <Config {...this.props}/>}
-                {value === 2 && <TabContainer {...this.props} />}
+                {value === 2 && <About {...this.props} />}
             </div>
         );
     }
